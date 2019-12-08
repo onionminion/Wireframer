@@ -1,0 +1,196 @@
+:root {
+    /* 
+      FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
+      COLORS THAT WE'LL USE TOGETHER IN MULTIPLE PLACES THAT
+      TOGETHER WILL MAKE UP A GIVEN THEME
+  */
+    --swatch-foundation: #F4EBE9;
+    /* USED FOR BODY BACKGROUND */
+    --swatch-primary: #2E4D58;
+    /* DOMINANT COLOR, USED FOR MOST BACKGROUNDS */
+    --swatch-complement: #E1E4CB;
+    /* USED IN FORGROUND OF PRIMARY FOR TEXT AND BORDERS */
+    --swatch_contrast: #111111;
+    /* USED IN MOUSE-OVER SELECTION OF LARGE ELEMENTS */
+    --swatch-accent: #669966;
+    /* USED IN MOUSE-OVER SELECTION OF TEXT AND BORDERS */
+    /* --my-font-family:         'Lexend Exa'; */
+    --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
+}
+
+@font-face {
+    font-family: 'Lexend Exa';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Lexend Exa Regular'), local('LexendExa-Regular'), url('UMBXrPdOoHOnxExyjdBeai3dAw.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body {
+    background-color: var(--swatch-foundation);
+    font-family: 'Lexend Exa';
+}
+
+div.banner {
+    background-image: linear-gradient(to bottom, #E6D9E2, #AE585E);
+    color: white;
+    font-size: 48pt;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    padding-left: 10%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+.home_new_list_button {
+    background-color: white;
+    color: #424242;
+    font-size: 32pt;
+}
+
+.home_new_list_button:hover {
+    box-shadow: 1px 2px;
+}
+
+.font-10 {
+    font-size: 10pt !important;
+    line-height: 40px !important;
+}
+
+.description-layout {
+    font-size: 13pt !important;
+    height: 50pt !important;
+}
+
+.font-17 {
+    font-size: 17pt !important;
+}
+
+.padding-24 {
+    padding-left: 24pt !important;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.header-style {
+    margin-bottom: 0px !important;
+    padding-top: 5px !important;
+}
+
+.fab-style {
+    position: relative !important;
+    right: 0px !important;
+    bottom: 0px !important;
+}
+
+.width-100 {
+    width: 100% !important;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0 !important;
+}
+
+.modal-style {
+    top: 30% !important;
+    width: 50% !important;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    padding-bottom: 27px;
+  }
+
+.padding-17 {
+    padding-left: 17px;
+}
+
+.no-padding-margin {
+    padding-left: 0px;
+    margin-top: 0px;
+}
+.font-24 {
+    font-size: 24pt;
+}
+.font-40 {
+    font-size: 40pt;
+}
+.no-padding {
+    padding: 0px !important;
+}
+.font-15 {
+    font-size: 15pt !important;
+}
+.s2_5 {
+    width:20.835%;
+    margin-left:auto;
+    left:auto;
+    right:auto
+}
+.zoom {
+    padding: 0.3rem 0.5rem 0rem 0.5rem !important;
+}
+.save {
+    padding-top: 0.3rem !important;
+}
+.margin-0 {
+    margin: 0px !important;
+}
+.cont {
+    height: 60px;
+    width: 50%;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 2px;
+    border-color: black;
+    margin: auto;
+}
+.but {
+    height: 30px;
+    width: 50%;
+    background-color: #d8d8d8;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 2px;
+    border-color: black;
+    margin: auto;
+    text-align: center;
+}
+.txt {
+    background-color: white !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-radius: 2px !important;
+    height: 1.5rem !important;
+    width: 70% !important;
+    display: block !important;
+    margin: auto !important;
+    color: grey !important;
+}
+.txtctrl {
+    background-color: white !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-radius: 2px !important;
+    height: 1.5rem !important;
+    width: 90% !important;
+    display: block !important;
+    margin: auto !important;
+    color: grey !important;
+}
+.txtfont {
+    background-color: white !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-radius: 2px !important;
+    height: 1.5rem !important;
+    width: 20% !important;
+    display: block !important;
+    color: grey !important;
+}

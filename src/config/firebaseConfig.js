@@ -14,6 +14,9 @@ var firebaseConfig = {
     appId: "1:76816119783:web:4b9c0a80d3951ddb012f42",
     measurementId: "G-5LCNMM5DMV"
   };
+
+
+
 firebase.initializeApp(firebaseConfig);
 
 // NOW THE firebase OBJECT CAN BE CONNECTED TO THE STORE

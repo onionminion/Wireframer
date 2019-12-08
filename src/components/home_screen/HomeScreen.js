@@ -3,31 +3,41 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
-import TodoListLinks from './TodoListLinks'
+import WireframeListLinks from './WireframeLinks'
+import { createWireframeHandler } from '../../store/database/asynchHandler'
+import { updateWireframeHandler } from '../../store/database/asynchHandler'
 
 class HomeScreen extends Component {
+    handleNewList = () => {       
+        const { props } = this;
+        const wireframe = { 
+            name: "Unknown",
+            owner: "Unknwon",
+            items: []
+        }
+        props.create(wireframe);
+    }
 
     render() {
         if (!this.props.auth.uid) {
             return <Redirect to="/login" />;
         }
-
         return (
-            <div className="dashboard container">
+            <div className="dashboard container width-100">
                 <div className="row">
-                    <div className="col s12 m4">
-                        <TodoListLinks />
+                    <div className="col s11 m5">
+                        <span className="recentwork font-24"><br/>Recent Work</span>
+                        <WireframeListLinks wireframes={this.props.wireframes}/>
                     </div>
 
-                    <div className="col s8">
+                    <div className="col s7">
                         <div className="banner">
-                            @todo<br />
-                            List Maker
+                            <span className="font-40">Wireframer<sup>TM</sup><br/><br/><br/>&nbsp;</span>
                         </div>
                         
                         <div className="home_new_list_container">
                                 <button className="home_new_list_button" onClick={this.handleNewList}>
-                                    Create a New To Do List
+                                    Create New Wireframe
                                 </button>
                         </div>
                     </div>
@@ -39,13 +49,19 @@ class HomeScreen extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.firebase.auth
+        auth: state.firebase.auth,
+        wireframes: state.firestore.ordered.wireframes
     };
 };
 
+const mapDispatchToProps = dispatch => ({
+    create: (wireframe) => dispatch(createWireframeHandler(wireframe)),
+    update: (wireframe) => dispatch(updateWireframeHandler(wireframe))
+});  
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect([
-      { collection: 'todoLists' },
-    ]),
+        { collection: 'wireframes'}
+    ])
 )(HomeScreen);

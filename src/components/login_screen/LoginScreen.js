@@ -57,7 +57,7 @@ class LoginScreen extends Component {
               <input className="active" type="password" name="password" id="password" onChange={this.handleChange} />
             </div>
             <div className="input-field">
-              <button type="submit" className="btn pink lighten-1 z-depth-0">Login</button>
+              <button type="submit" className="btn z-depth-0" style={{backgroundColor: "#AE585E"}}>Login</button>
               {authError ? <div className="red-text center"><p>{authError}</p></div> : null}
             </div>
           </form>

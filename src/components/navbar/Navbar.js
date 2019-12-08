@@ -11,11 +11,11 @@ class Navbar extends React.Component {
   render() {
     const { auth, profile } = this.props;
     const links = auth.uid ? <LoggedInLinks profile={profile} /> : <LoggedOutLinks />;
-
+    
     return (
-      <nav className="nav-wrapper grey darken-3">
+      <nav className="nav-wrapper" style={{backgroundColor: "#AE585E"}}>
         <div className="container">
-          <Link to="/" className="brand-logo">@todo</Link>
+          <Link to="/" className="brand-logo">Wireframer!</Link>
           {links}
         </div>
       </nav>
