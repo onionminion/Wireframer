@@ -114,8 +114,8 @@ div.banner {
     padding-left: 0px;
     margin-top: 0px;
 }
-.font-24 {
-    font-size: 24pt;
+.font-18 {
+    font-size: 18pt;
 }
 .font-40 {
     font-size: 40pt;
@@ -125,6 +125,9 @@ div.banner {
 }
 .font-15 {
     font-size: 15pt !important;
+}
+.font-12 {
+    font-size: 12pt !important;
 }
 .s2_5 {
     width:20.835%;
@@ -193,4 +196,16 @@ div.banner {
     width: 20% !important;
     display: block !important;
     color: grey !important;
+}
+.colorpicker {
+    visibility: hidden;
+    height: 32px;
+    width: 32px;
+}
+.colorcircle {
+    background-color: black;
+    height: 32px !important;
+    width: 32px !important;
+    border-radius: 50px;
+    position: absolute;
 }

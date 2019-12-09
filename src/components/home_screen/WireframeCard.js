@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { deleteWireframeHandler } from '../../store/database/asynchHandler'
 import DeleteModal from './DeleteModal.js';
-import { firestoreConnect } from 'react-redux-firebase';
 
 class WireframeCard extends React.Component {
     render() {
@@ -14,7 +13,7 @@ class WireframeCard extends React.Component {
                 <div className="card-content grey-text text-darken-3 no-padding" >
                     <div className="row">
                         <div className="col s11 m9">
-                            <span className="card-title font-15" >{wireframe.name}</span>
+                            <span className="card-title font-12" >{wireframe.name}</span>
                         </div>
                         <div className="col s11 m2">
                             <DeleteModal className="col s1 margin" wireframe={wireframe} />

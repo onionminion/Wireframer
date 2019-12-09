@@ -25,19 +25,18 @@ class HomeScreen extends Component {
         return (
             <div className="dashboard container width-100">
                 <div className="row">
-                    <div className="col s11 m5">
-                        <span className="recentwork font-24"><br/>Recent Work</span>
+                    <div className="col s4">
+                        <span className="recentwork font-18"><br/>Recent Work</span>
                         <WireframeListLinks wireframes={this.props.wireframes}/>
                     </div>
-                    <div className="col s7">
+                    <div className="col s8">
                         <div className="banner">
                             <span className="font-40">Wireframer<sup>TM</sup><br/><br/><br/>&nbsp;</span>
                         </div>
-                        
                         <div className="home_new_list_container">
-                                <button className="home_new_list_button" onClick={this.handleNewList}>
-                                    Create New Wireframe
-                                </button>
+                            <button className="home_new_list_button" onClick={this.handleNewList}>
+                                Create New Wireframe
+                            </button>
                         </div>
                     </div>
                 </div>

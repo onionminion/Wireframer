@@ -8,6 +8,7 @@ import ZoomIn from './icons/zoom_in.png';
 import ZoomOut from './icons/zoom_out.png';
 import { firestoreConnect } from 'react-redux-firebase';
 import { updateWireframeHandler } from '../../store/database/asynchHandler';
+import { ChromePicker } from 'react-color';
 import uuid from 'uuid';
 
 class EditScreen extends Component {
@@ -19,21 +20,32 @@ class EditScreen extends Component {
         height: this.props.wireframe ? this.props.wireframe.height : 0,
         width: this.props.wireframe ? this.props.wireframe.width : 0,
         controls: this.props.wireframe ? this.props.wireframe.controls : [],
-        
+        currentControl: null,
+        currentBackColor: "black",
+        currentTextColor: "black",
+        currentBordColor: "black"
     }
 
-    handleChange = (e) => {
+    updateFields = (e) => {
         const { target } = e;
         this.setState(state => ({
             ...state,
             [target.id]: target.value,
         }), () => this.handleUpdate());
     }
-
     handleUpdate = () => {
         var { props, state } = this;
         var wireframe = { ...state };
         props.update(wireframe);
+    }
+    changeBackColor = (e) => {
+        this.setState({currentBackColor: e.target.value});
+    }
+    changeTextColor = (e) => {
+        this.setState({currentTextColor: e.target.value});
+    }
+    changeBordColor = (e) => {
+        this.setState({currentBordColor: e.target.value});
     }
 
     render() {
@@ -53,11 +65,11 @@ class EditScreen extends Component {
                 </div>
                 <div className="input-field padding-17">
                     <label htmlFor="name" className="active padding-17">Name</label>
-                    <input className="active" type="text" name="name" id="name" onChange={this.handleChange} defaultValue={wireframe.name} />
+                    <input className="active" type="text" name="name" id="name" onChange={this.updateFields} defaultValue={wireframe.name} />
                 </div>
                 <div className="input-field padding-17">
                     <label htmlFor="owner" className="active padding-17">Owner</label>
-                    <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} defaultValue={wireframe.owner} />
+                    <input className="active" type="text" name="owner" id="owner" onChange={this.updateFields} defaultValue={wireframe.owner} />
                 </div>
                 <div className="row">
                     <div className="leftside col s2_5 grey lighten-3 zoom">
@@ -99,12 +111,29 @@ class EditScreen extends Component {
                         </div>
                         <span>&nbsp;<br/></span>
                         <div className="row margin-0">
-                            <div className="col s7" style={{fontSize: "10pt"}}>Font Size:</div>
+                            <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Font Size:</div>
                             <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
                         </div>
                         <span>&nbsp;<br/></span>
                         <div className="row margin-0">
-                            <div className="col s7" style={{fontSize: "10pt"}}>Background:</div>
+                            <div className="col s9" style={{fontSize: "10pt", marginTop: "2%"}}>Background:</div>
+                            <label className="col s3 colorcircle" style={{backgroundColor: this.state.currentBackColor}}>
+                                <input type="color" className="colorpicker" onChange={(e)=>this.changeBackColor(e)}></input>
+                            </label>
+                        </div>
+                        <span>&nbsp;<br/></span>
+                        <div className="row margin-0">
+                            <div className="col s9" style={{fontSize: "10pt", marginTop: "2%"}}>Text Color:</div>
+                            <label className="col s3 colorcircle" style={{backgroundColor: this.state.currentTextColor}}>
+                                <input type="color" className="colorpicker" onChange={(e)=>this.changeTextColor(e)}></input>
+                            </label>
+                        </div>
+                        <span>&nbsp;<br/></span>
+                        <div className="row margin-0">
+                            <div className="col s9" style={{fontSize: "10pt", marginTop: "2%"}}>Border Color:</div>
+                            <label className="col s3 colorcircle" style={{backgroundColor: this.state.currentBordColor}}>
+                                <input type="color" className="colorpicker" onChange={(e)=>this.changeBordColor(e)}></input>
+                            </label>
                         </div>
                     </div>
                 </div>
