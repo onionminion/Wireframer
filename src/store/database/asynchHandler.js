@@ -39,7 +39,6 @@ export const createWireframeHandler = (wireframe) => (dispatch, getState, { getF
     firestore.collection('wireframes').add({
         owner: wireframe.owner,
         name: wireframe.name,
-        key: wireframe.key,
         height: wireframe.height,
         width: wireframe.width,
         controls: wireframe.controls
@@ -57,7 +56,6 @@ export const updateWireframeHandler = (wireframe) => (dispatch, getState, { getF
             firestore.collection('wireframes').doc(wireframe.id).set({
                 owner: wireframe.owner,
                 name: wireframe.name,
-                key: wireframe.key,
                 height: wireframe.height,
                 width: wireframe.width,
                 controls: wireframe.controls

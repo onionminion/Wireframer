@@ -101,7 +101,7 @@ class EditScreen extends Component {
                             <input type="text" className="txt" value="Input" disabled></input>
                             <span style={{margin: "auto", display: "table"}}>Textfield</span>
                         </div>
-                        <span>&nbsp;<br/><br/></span>
+                        <span style={{fontSize: "12pt"}}>&nbsp;<br/><br/><br/><br/></span>
                     </div>
                     <div className="mid col s7 white">asdf</div>
                     <div className="rightside col s2_5 grey lighten-3">Properties
@@ -135,6 +135,27 @@ class EditScreen extends Component {
                                 <input type="color" className="colorpicker" onChange={(e)=>this.changeBordColor(e)}></input>
                             </label>
                         </div>
+                        <span>&nbsp;<br/></span>
+                        <div className="row margin-0">
+                            <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Border Thickness:</div>
+                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value" style={{marginTop: "4.4%"}}></input>
+                        </div>
+                        <span>&nbsp;<br/></span>
+                        <div className="row margin-0">
+                            <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Border Radius:</div>
+                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value" style={{marginTop: "4.4%"}}></input>
+                        </div>
+                        <span>&nbsp;<br/></span>
+                        <div className="row margin-0">
+                            <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Width:</div>
+                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
+                        </div>
+                        <span>&nbsp;<br/></span>
+                        <div className="row margin-0">
+                            <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Height:</div>
+                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
+                        </div>
+                        <span style={{fontSize: "12pt"}}>&nbsp;<br/></span>
                     </div>
                 </div>
             </div>

@@ -11,9 +11,11 @@ class HomeScreen extends Component {
     handleNewList = () => {       
         const { props } = this;
         const wireframe = { 
+            owner: props.auth.email,
             name: "Unknown",
-            owner: "Unknwon",
-            items: []
+            height: 200,
+            width: 200,
+            controls: []
         }
         props.create(wireframe);
     }
@@ -27,7 +29,7 @@ class HomeScreen extends Component {
                 <div className="row">
                     <div className="col s4">
                         <span className="recentwork font-18"><br/>Recent Work</span>
-                        <WireframeListLinks wireframes={this.props.wireframes}/>
+                        <WireframeListLinks wireframes={this.props.wireframes} owner={this.props.auth.email}/>
                     </div>
                     <div className="col s8">
                         <div className="banner">
