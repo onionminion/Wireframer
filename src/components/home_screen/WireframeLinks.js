@@ -11,7 +11,11 @@ class WireframeLinks extends React.Component {
     render() {
         if(!this.props.wireframes)
 	        return <React.Fragment />
-        const wireframes = this.props.wireframes;
+        const wireframes = []
+        for (var i = 0; i < this.props.wireframes.length; i++) {
+            if (this.props.wireframes[i].owner == this.props.owner)
+                wireframes.push(this.props.wireframes[i]);
+        }
         console.log(wireframes);
 
         return (
