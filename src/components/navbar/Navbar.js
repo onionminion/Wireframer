@@ -14,8 +14,8 @@ class Navbar extends React.Component {
     
     return (
       <nav className="nav-wrapper" style={{backgroundColor: "#AE585E"}}>
-        <div className="container">
-          <Link to="/" className="brand-logo">Wireframer!</Link>
+        <div className="container width-100">
+          <Link to="/" className="brand-logo margin-nav">Wireframer!</Link>
           {links}
         </div>
       </nav>

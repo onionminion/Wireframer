@@ -72,7 +72,7 @@ class EditScreen extends Component {
                     <input className="active" type="text" name="owner" id="owner" onChange={this.updateFields} defaultValue={wireframe.owner} />
                 </div>
                 <div className="row">
-                    <div className="leftside col s2_5 grey lighten-3 zoom">
+                    <div className="leftside col s3 grey lighten-3 zoom">
                         <div className="row margin-0">
                             <div className="col s5 grey lighten-3 no-padding">
                                 <input type="image" src={ZoomIn} />
@@ -81,7 +81,7 @@ class EditScreen extends Component {
                             <div className="col s3 save clickable"><span>Save</span></div>
                             <div className="col s3 save clickable"><span>Close</span></div>
                         </div>
-                        <span>&nbsp;</span>
+                        <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0">
                             <div className="cont "></div>
                             <span style={{margin: "auto", display: "table"}}>Container</span>
@@ -101,10 +101,10 @@ class EditScreen extends Component {
                             <input type="text" className="txt" value="Input" disabled></input>
                             <span style={{margin: "auto", display: "table"}}>Textfield</span>
                         </div>
-                        <span style={{fontSize: "12pt"}}>&nbsp;<br/><br/><br/><br/></span>
+                        <span style={{fontSize: "12.8pt"}}>&nbsp;<br/><br/><br/></span>
                     </div>
-                    <div className="mid col s7 white">asdf</div>
-                    <div className="rightside col s2_5 grey lighten-3">Properties
+                    <div className="mid col s6 white">asdf</div>
+                    <div className="rightside col s3 grey lighten-3">Properties
                         <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0">
                             <input type="text" className="txtctrl" value="value"></input>
@@ -155,7 +155,7 @@ class EditScreen extends Component {
                             <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Height:</div>
                             <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
                         </div>
-                        <span style={{fontSize: "12pt"}}>&nbsp;<br/></span>
+                        <span style={{fontSize: "11pt"}}>&nbsp;<br/></span>
                     </div>
                 </div>
             </div>

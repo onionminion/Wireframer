@@ -129,12 +129,6 @@ div.banner {
 .font-12 {
     font-size: 12pt !important;
 }
-.s2_5 {
-    width:20.835%;
-    margin-left:auto;
-    left:auto;
-    right:auto
-}
 .zoom {
     padding: 0.3rem 0.5rem 0rem 0.5rem !important;
 }
@@ -208,4 +202,7 @@ div.banner {
     width: 32px !important;
     border-radius: 50px;
     position: absolute;
+}
+.margin-nav {
+    margin-left: 12px;
 }

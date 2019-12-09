@@ -31,7 +31,7 @@ class HomeScreen extends Component {
                         <span className="recentwork font-18"><br/>Recent Work</span>
                         <WireframeListLinks wireframes={this.props.wireframes} owner={this.props.auth.email}/>
                     </div>
-                    <div className="col s8">
+                    <div className="col s7">
                         <div className="banner">
                             <span className="font-40">Wireframer<sup>TM</sup><br/><br/><br/>&nbsp;</span>
                         </div>

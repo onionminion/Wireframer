@@ -1,7 +1,11 @@
-import React from 'react'
+import React from 'react';
 import { connect } from 'react-redux';
-import testData from './TestData copy.json'
+import testData from './TestData.json';
 import { getFirestore } from 'redux-firestore';
+import { Redirect } from 'react-router-dom';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
+
 
 class DatabaseTester extends React.Component {
 
@@ -9,6 +13,7 @@ class DatabaseTester extends React.Component {
     // DO THIS ANY TIME YOU LIKE WITHOUT HAVING
     // TO LOG IN
     handleClear = () => {
+        console.log(this.props.users);
         const fireStore = getFirestore();
         fireStore.collection('wireframes').get().then(function(querySnapshot){
             querySnapshot.forEach(function(doc) {
@@ -38,19 +43,42 @@ class DatabaseTester extends React.Component {
     }
 
     render() {
+        if (!this.props.auth.uid) 
+            return <Redirect to="/login" />;
+        if (this.props.users !== undefined) {
+            console.log(this.props.users.length);
+
+            for (var i = 0; i < this.props.users.length; i++) {
+                if (this.props.auth.email==this.props.users[i].email) {
+                    if (this.props.users[i].isAdmin)
+                        return (
+                            <div>
+                                <button onClick={this.handleClear}>Clear Database</button>
+                                <button onClick={this.handleReset}>Reset Database</button>
+                            </div>);
+                    else 
+                        return <Redirect to="/" />;
+                }
+            }         
+        }
         return (
-            <div>
-                <button onClick={this.handleClear}>Clear Database</button>
-                <button onClick={this.handleReset}>Reset Database</button>
-            </div>)
+            <React.Fragment />);
+        
+        
     }
 }
 
 const mapStateToProps = function (state) {
     return {
         auth: state.firebase.auth,
+        users: state.firestore.ordered.users,
         firebase: state.firebase
     };
 }
 
-export default connect(mapStateToProps)(DatabaseTester);
+export default compose(
+    connect(mapStateToProps, null),
+    firestoreConnect([
+        { collection: 'users'}
+    ])
+)(DatabaseTester);
