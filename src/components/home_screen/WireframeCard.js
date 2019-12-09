@@ -2,15 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { deleteWireframeHandler } from '../../store/database/asynchHandler'
+import DeleteModal from './DeleteModal.js';
 import { firestoreConnect } from 'react-redux-firebase';
 
 class WireframeCard extends React.Component {
-    delete(e) {
-        e.preventDefault();
-        const { props } = this;
-        props.delete(this.props.wireframe)
-    }
-
     render() {
         const { wireframe } = this.props;
 
@@ -22,7 +17,7 @@ class WireframeCard extends React.Component {
                             <span className="card-title font-15" >{wireframe.name}</span>
                         </div>
                         <div className="col s11 m2">
-                            <span className="button font-15" onClick={(e) => this.delete(e)}>X</span>
+                            <DeleteModal className="col s1 margin" wireframe={wireframe} />
                         </div>
                     </div>
                 </div>

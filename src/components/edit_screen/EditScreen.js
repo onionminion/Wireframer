@@ -3,7 +3,6 @@ import { Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
-import ListModal from './ListModal.js';
 import { Icon, Button } from 'react-materialize';
 import ZoomIn from './icons/zoom_in.png';
 import ZoomOut from './icons/zoom_out.png';
@@ -50,7 +49,6 @@ class EditScreen extends Component {
         return (
             <div className="container white width-100">
                 <div className="row header-style">
-                    <ListModal className="col s1 margin" wireframe={wireframe} />
                     <div className="col s11 grey-text text-darken-3 font-17">Todo List</div>
                 </div>
                 <div className="input-field padding-17">
