@@ -47,28 +47,74 @@ class EditScreen extends Component {
     changeBordColor = (e) => {
         this.setState({currentBordColor: e.target.value});
     }
+    buildDivs = () => {
+        this.controlDivs = [];
+        for (var i = 0; i < this.state.controls.length; i++) {
+            var control = this.state.controls[i];
+            this.controlDivs.push(
+                <div className={"ctr-" + control.type} 
+                    style={{
+                        backgroundColor: control.background_color,
+                        borderColor: control.border_color,
+                        color: control.text_color,
+                        borderWidth: control.border_thickness,
+                        fontSize: control.fontSize,
+                        width: control.width,
+                        height: control.height
+                    }}
+                >{control.text}</div>
+            );
+        }
+    }
     addContainer = () => {
         const controls = this.state.controls;
         const uniqueID = uuid.v4();
         const container = {
             type: "container",
             id: uniqueID,
-            background_color: "000000",
-            border_color: "ffffff",
+            background_color: "#000000",
+            border_color: "#ffffff",
+            color: "#FFFFFF",
             border_thickness: 1,
             border_radius: 1,
-            font_size: 0,
+            font_size: "0px",
             text: "",
             position_x: 0,
             position_y: 0,
-            width: 100,
-            height: 50
+            width: "100px",
+            height: "50px"
         }
         controls.push(container);
         const containerDiv = (
-            <div className="cont " style={{width: "100px", height: "50px", margin: 0}}></div>
+            <div className="ctr-container" style={{width: "100px", height: "50px", margin: 0}}></div>
         )
         this.controlDivs.push(containerDiv);
+        this.setState({controls});
+        console.log(controls);
+    }
+    addLabel = () => {
+        const controls = this.state.controls;
+        const uniqueID = uuid.v4();
+        const label = {
+            type: "label",
+            id: uniqueID,
+            background_color: "#000000",
+            border_color: "transparent",
+            color: "#FFFFFF",
+            border_thickness: 1,
+            border_radius: 1,
+            font_size: "10pt",
+            text: "Prompt for input",
+            position_x: 0,
+            position_y: 0,
+            width: "100px",
+            height: "50px"
+        }
+        controls.push(label);
+        const labelDiv = (
+            <div className="ctr-label" style={{width: "100px", height: "50px", fontSize:"10pt"}}>{label.text}</div>
+        );
+        this.controlDivs.push(labelDiv);
         this.setState({controls});
         console.log(controls);
     }
@@ -82,6 +128,7 @@ class EditScreen extends Component {
             controls: this.state.controls,
         }
         this.props.update(wireframe);
+        this.buildDivs();
     }
     saveBeforeClose = () => {
         this.saveWork();
@@ -93,7 +140,6 @@ class EditScreen extends Component {
     render() {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
-
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
@@ -101,6 +147,7 @@ class EditScreen extends Component {
             return <React.Fragment />;
         if (this.state.redirect)
             return <Redirect push to="/"/>;
+        this.buildDivs();
         return (
             <div className="container white width-100">
                 <div className="row header-style">
@@ -133,12 +180,12 @@ class EditScreen extends Component {
                         </div>
                         <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0 clickable" onClick={()=>this.addContainer()}>
-                            <div className="cont "></div>
+                            <div className="ctr-container" style={{margin: "auto", width: "50%"}}></div>
                             <span style={{margin: "auto", display: "table"}}>Container</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
-                        <div className="row margin-0 clickable">
-                            <span style={{margin: "auto", display: "table", fontSize: "12px"}}>Prompt for input:</span>
+                        <div className="row margin-0 clickable" onClick={()=>this.addLabel()}>
+                            <span className="lab" style={{margin: "auto", display: "table", fontSize: "12px"}}>Prompt for input:</span>
                             <span style={{margin: "auto", display: "table"}}>Label</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
