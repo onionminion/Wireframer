@@ -63,8 +63,6 @@ class DatabaseTester extends React.Component {
         }
         return (
             <React.Fragment />);
-        
-        
     }
 }
 

@@ -12,6 +12,7 @@ import { ChromePicker } from 'react-color';
 import uuid from 'uuid';
 
 class EditScreen extends Component {
+    controlDivs = [];
     state = {
         name: this.props.wireframe ? this.props.wireframe.name : "",
         owner: this.props.wireframe ? this.props.wireframe.owner : "",
@@ -47,7 +48,34 @@ class EditScreen extends Component {
     changeBordColor = (e) => {
         this.setState({currentBordColor: e.target.value});
     }
+    addContainer = () => {
+        const controls = this.state.controls;
+        const uniqueID = uuid.v4();
+        const container = {
+            type: "container",
+            id: uniqueID,
+            background_color: "000000",
+            border_color: "ffffff",
+            border_thickness: 1,
+            border_radius: 1,
+            font_size: 0,
+            text: "",
+            position_x: 0,
+            position_y: 0,
+            width: 100,
+            height: 50
+        }
+        controls.push(container);
+        const containerDiv = (
+            <div className="cont " style={{width: "100px", height: "50px", margin: 0}}></div>
+        )
+        this.controlDivs.push(containerDiv);
+        this.setState({controls});
+        console.log(controls);
+    }
+    saveWork = () => {
 
+    }
     render() {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
@@ -82,28 +110,32 @@ class EditScreen extends Component {
                             <div className="col s3 save clickable"><span>Close</span></div>
                         </div>
                         <span>&nbsp;<br/><br/></span>
-                        <div className="row margin-0">
+                        <div className="row margin-0 clickable" onClick={()=>this.addContainer()}>
                             <div className="cont "></div>
                             <span style={{margin: "auto", display: "table"}}>Container</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
-                        <div className="row margin-0">
+                        <div className="row margin-0 clickable">
                             <span style={{margin: "auto", display: "table", fontSize: "12px"}}>Prompt for input:</span>
                             <span style={{margin: "auto", display: "table"}}>Label</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
-                        <div className="row margin-0">
+                        <div className="row margin-0 clickable">
                             <div className="but">Submit</div>
                             <span style={{margin: "auto", display: "table"}}>Button</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
-                        <div className="row margin-0">
+                        <div className="row margin-0 clickable">
                             <input type="text" className="txt" value="Input" disabled></input>
                             <span style={{margin: "auto", display: "table"}}>Textfield</span>
                         </div>
                         <span style={{fontSize: "12.8pt"}}>&nbsp;<br/><br/><br/></span>
                     </div>
-                    <div className="mid col s6 white">asdf</div>
+                    <div className="mid col s6 white">
+                        <div className="diagram">
+                            {this.controlDivs}
+                        </div>
+                    </div>
                     <div className="rightside col s3 grey lighten-3">Properties
                         <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0">

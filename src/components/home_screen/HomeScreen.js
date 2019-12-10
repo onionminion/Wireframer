@@ -6,6 +6,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import WireframeListLinks from './WireframeLinks'
 import { createWireframeHandler } from '../../store/database/asynchHandler'
 import { updateWireframeHandler } from '../../store/database/asynchHandler'
+import { objectTypeIndexer } from '@babel/types';
 
 class HomeScreen extends Component {
     handleNewList = () => {       
@@ -46,7 +47,6 @@ class HomeScreen extends Component {
         );
     }
 }
-
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
