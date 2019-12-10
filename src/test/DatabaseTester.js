@@ -29,7 +29,6 @@ class DatabaseTester extends React.Component {
             fireStore.collection('wireframes').add({
                     owner: testData.owner,
                     name: testData.name,
-                    priority: 0,
                     key: testData.key,
                     width: testData.width,
                     height: testData.height,

@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import ItemsList from './ItemsList.js'
-import { Icon, Button } from 'react-materialize';
 import ZoomIn from './icons/zoom_in.png';
 import ZoomOut from './icons/zoom_out.png';
 import { firestoreConnect } from 'react-redux-firebase';
 import { updateWireframeHandler } from '../../store/database/asynchHandler';
-import { ChromePicker } from 'react-color';
 import uuid from 'uuid';
+import { Modal, Button } from 'react-materialize';
+
 
 class EditScreen extends Component {
     controlDivs = [];
@@ -17,14 +16,14 @@ class EditScreen extends Component {
         name: this.props.wireframe ? this.props.wireframe.name : "",
         owner: this.props.wireframe ? this.props.wireframe.owner : "",
         id: this.props.wireframe ? this.props.wireframe.id : "",
-        key: this.props.wireframe ? this.props.wireframe.key: null,
         height: this.props.wireframe ? this.props.wireframe.height : 0,
         width: this.props.wireframe ? this.props.wireframe.width : 0,
         controls: this.props.wireframe ? this.props.wireframe.controls : [],
         currentControl: null,
         currentBackColor: "black",
         currentTextColor: "black",
-        currentBordColor: "black"
+        currentBordColor: "black",
+        redirect: false
     }
 
     updateFields = (e) => {
@@ -74,7 +73,22 @@ class EditScreen extends Component {
         console.log(controls);
     }
     saveWork = () => {
-
+        const wireframe = {
+            name: this.state.name,
+            owner: this.state.owner,
+            id: this.state.id,
+            height: this.state.height,
+            width: this.state.width,
+            controls: this.state.controls,
+        }
+        this.props.update(wireframe);
+    }
+    saveBeforeClose = () => {
+        this.saveWork();
+        this.close();
+    }
+    close = () => {
+        this.setState({redirect: true});
     }
     render() {
         const auth = this.props.auth;
@@ -84,8 +98,9 @@ class EditScreen extends Component {
             return <Redirect to="/" />;
         }
         if (!wireframe)
-            return <React.Fragment />
-
+            return <React.Fragment />;
+        if (this.state.redirect)
+            return <Redirect push to="/"/>;
         return (
             <div className="container white width-100">
                 <div className="row header-style">
@@ -106,8 +121,15 @@ class EditScreen extends Component {
                                 <input type="image" src={ZoomIn} />
                                 <input type="image" src={ZoomOut} />
                             </div>
-                            <div className="col s3 save clickable"><span>Save</span></div>
-                            <div className="col s3 save clickable"><span>Close</span></div>
+                            <div className="col s3 save clickable" onClick={()=>this.saveWork()}><span>Save</span></div>
+                            <div className="col s3 save clickable">
+                                <Modal header="Close Edit Screen" trigger={<span>Close</span>} className="modal-style" actions={
+                                    <div>
+                                        <Button waves="green" modal="close" flat onClick={()=>this.saveBeforeClose()}>Save</Button>
+                                        <Button waves="red" modal="close" flat onClick={()=>this.close()}>Close</Button>
+                                    </div>
+                                }>Do you want to save your work before closing?</Modal>
+                            </div>
                         </div>
                         <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0 clickable" onClick={()=>this.addContainer()}>
