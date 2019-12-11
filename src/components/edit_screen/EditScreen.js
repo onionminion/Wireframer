@@ -49,10 +49,8 @@ class EditScreen extends Component {
     }
     addContainer = () => {
         const controls = this.state.controls;
-        const uniqueID = uuid.v4();
         const container = {
             type: "container",
-            id: uniqueID,
             background_color: "#FFFFFF",
             border_color: "#000000",
             text_color: "#FFFFFF",
@@ -72,10 +70,8 @@ class EditScreen extends Component {
     }
     addLabel = () => {
         const controls = this.state.controls;
-        const uniqueID = uuid.v4();
         const label = {
             type: "label",
-            id: uniqueID,
             background_color: "#FFFFFF",
             border_color: "transparent",
             text_color: "#000000",
@@ -95,10 +91,8 @@ class EditScreen extends Component {
     }
     addButton = () => {
         const controls = this.state.controls;
-        const uniqueID = uuid.v4();
         const button = {
             type: "button",
-            id: uniqueID,
             background_color: "#d8d8d8",
             border_color: "#000000",
             text_color: "#000000",
@@ -118,10 +112,8 @@ class EditScreen extends Component {
     }
     addTextfield = () => {
         const controls = this.state.controls;
-        const uniqueID = uuid.v4();
         const textfield = {
             type: "textfield",
-            id: uniqueID,
             background_color: "#FFFFFF",
             border_color: "#9e9e9e",
             text_color: "#808080",
@@ -243,6 +235,8 @@ class EditScreen extends Component {
                     <div className="mid col s6 white">
                         <div className="diagram">
                             {this.state.controls.map(control => {
+                                const uniqueID = uuid.v4();
+                                control.id = uniqueID;
                                 if (control.type == "textfield") {
                                     return(
                                         <div key={control.id} style={{position: "relative", width: control.width, height: control.height}} onClick={()=>this.selectControl(control)} >
