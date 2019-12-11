@@ -12,7 +12,6 @@ import Draggable from 'react-draggable';
 
 
 class EditScreen extends Component {
-    controlDivs = [];
     state = {
         name: this.props.wireframe ? this.props.wireframe.name : "",
         owner: this.props.wireframe ? this.props.wireframe.owner : "",
@@ -238,17 +237,16 @@ class EditScreen extends Component {
         this.setState({currentBordThick: control.border_thickness});
     }
     updatePos = (e, data) => {
-        console.log(data);
         for (var i = 0; i < this.state.controls.length; i++) {
             if (this.state.controls[i].id == this.state.currentControl.id) {
                 const newControls = this.state.controls;
-                newControls[i].position_x = this.state.currentControl.position_x + data.x;
-                newControls[i].position_y = this.state.currentControl.position_y + data.y;
+                console.log(newControls[i].position_x);
+                newControls[i].position_x = data.x;
+                newControls[i].position_y = data.y;
                 this.setState({controls: newControls});
                 this.setState({currentControl: newControls[i]});
             }
         }
-        console.log(this.state.controls);
     }
     saveWork = () => {
         const wireframe = {
@@ -338,7 +336,8 @@ class EditScreen extends Component {
                                 control.id = uniqueID;
                                 if (control.type == "textfield") {
                                     return(
-                                        <Draggable onStart={()=>this.selectControl(control)}>
+                                        <Draggable onStart={()=>this.selectControl(control)} onDrag={(e, data)=>this.updatePos(e, data)}
+                                            bounds="parent" defaultPosition={{x: control.position_x, y: control.position_y}}>
                                             <div key={control.id} style={{position: "relative", width: control.width, height: control.height}} >
                                                 <input type="text" defaultValue={control.text} readOnly style={{
                                                     backgroundColor: control.background_color,
@@ -353,9 +352,7 @@ class EditScreen extends Component {
                                                     cursor: "pointer",
                                                     position: "absolute",
                                                     left: control.position_x + "px",
-                                                    top: control.position_y + "px",
-                                                    marginBottom: "7px"}}>
-                                                </input>
+                                                    top: control.position_y + "px"}}></input>
                                                 <div className="rect top_left" style={control.selected ? null : {display: "none"}}></div>
                                                 <div className="rect top_right" style={control.selected ? null : {display: "none"}}></div>
                                                 <div className="rect bottom_left" style={control.selected ? null : {display: "none"}}></div>
@@ -366,7 +363,8 @@ class EditScreen extends Component {
                                 }
                                 else {
                                     return(
-                                        <Draggable onStart={()=>this.selectControl(control)} onStop={(e, data)=>this.updatePos(e, data)}>
+                                        <Draggable onStart={()=>this.selectControl(control)} onDrag={(e, data)=>this.updatePos(e, data)}
+                                            bounds="parent" defaultPosition={{x: control.position_x, y: control.position_y}}>
                                             <div key={control.id} onClick={()=>this.selectControl(control)} style={{
                                                 backgroundColor: control.background_color,
                                                 borderStyle: "solid",
@@ -379,11 +377,7 @@ class EditScreen extends Component {
                                                 height: control.height,
                                                 cursor: "pointer",
                                                 position: "absolute",
-                                                left: control.position_x,
-                                                top: control.position_y,
-                                                textAlign: "center",
-                                                marginBottom: "7px"}}
-                                            >{control.text} 
+                                                textAlign: "center"}}>{control.text} 
                                             <div className="rect top_left" style={control.selected ? null : {display: "none"}}></div>
                                             <div className="rect top_right" style={control.selected ? null : {display: "none"}}></div>
                                             <div className="rect bottom_left" style={control.selected ? null : {display: "none"}}></div>
