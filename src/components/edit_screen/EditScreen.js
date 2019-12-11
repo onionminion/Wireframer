@@ -17,8 +17,8 @@ class EditScreen extends Component {
         name: this.props.wireframe ? this.props.wireframe.name : "",
         owner: this.props.wireframe ? this.props.wireframe.owner : "",
         id: this.props.wireframe ? this.props.wireframe.id : "",
-        height: this.props.wireframe ? this.props.wireframe.height : 0,
-        width: this.props.wireframe ? this.props.wireframe.width : 0,
+        height: this.props.wireframe ? this.props.wireframe.height : 450,
+        width: this.props.wireframe ? this.props.wireframe.width : 450,
         controls: this.props.wireframe ? this.props.wireframe.controls : [],
         currentControl: null,
         currentText: null,
@@ -237,6 +237,19 @@ class EditScreen extends Component {
         this.setState({currentBordRad: control.border_radius});
         this.setState({currentBordThick: control.border_thickness});
     }
+    updatePos = (e, data) => {
+        console.log(data);
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].position_x = this.state.currentControl.position_x + data.x;
+                newControls[i].position_y = this.state.currentControl.position_y + data.y;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
+        console.log(this.state.controls);
+    }
     saveWork = () => {
         const wireframe = {
             name: this.state.name,
@@ -247,13 +260,13 @@ class EditScreen extends Component {
             controls: this.state.controls,
         }
         this.props.update(wireframe);
-        this.buildDivs();
     }
     saveBeforeClose = () => {
         this.saveWork();
         this.close();
     }
     close = () => {
+        this.setState({controls: []});
         this.setState({redirect: true});
     }
     render() {
@@ -319,7 +332,7 @@ class EditScreen extends Component {
                         <span style={{fontSize: "13pt"}}>&nbsp;<br/><br/><br/></span>
                     </div>
                     <div className="mid col s6 white">
-                        <div className="diagram">
+                        <div className="diagram" style={{width: this.state.width+"px", height: this.state.height+"px"}}>
                             {this.state.controls.map(control => {
                                 const uniqueID = uuid.v4();
                                 control.id = uniqueID;
@@ -338,7 +351,9 @@ class EditScreen extends Component {
                                                     width: control.width,
                                                     height: control.height,
                                                     cursor: "pointer",
-                                                    position: "relative",
+                                                    position: "absolute",
+                                                    left: control.position_x + "px",
+                                                    top: control.position_y + "px",
                                                     marginBottom: "7px"}}>
                                                 </input>
                                                 <div className="rect top_left" style={control.selected ? null : {display: "none"}}></div>
@@ -351,7 +366,7 @@ class EditScreen extends Component {
                                 }
                                 else {
                                     return(
-                                        <Draggable onStart={()=>this.selectControl(control)}>
+                                        <Draggable onStart={()=>this.selectControl(control)} onStop={(e, data)=>this.updatePos(e, data)}>
                                             <div key={control.id} onClick={()=>this.selectControl(control)} style={{
                                                 backgroundColor: control.background_color,
                                                 borderStyle: "solid",
@@ -363,7 +378,9 @@ class EditScreen extends Component {
                                                 width: control.width,
                                                 height: control.height,
                                                 cursor: "pointer",
-                                                position: "relative",
+                                                position: "absolute",
+                                                left: control.position_x,
+                                                top: control.position_y,
                                                 textAlign: "center",
                                                 marginBottom: "7px"}}
                                             >{control.text} 
