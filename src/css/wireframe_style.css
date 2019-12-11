@@ -138,16 +138,17 @@ div.banner {
 .margin-0 {
     margin: 0px !important;
 }
-.ctr-container{
+.dis-container{
     height: 60px;
     background-color: white;
     border-style: solid;
     border-width: 1px;
     border-radius: 2px;
     border-color: black;
+    position: relative;
 }
-.but {
-    height: 30px;
+.dis-button {
+    height: 25px;
     width: 50%;
     background-color: #d8d8d8;
     border-style: solid;
@@ -157,16 +158,16 @@ div.banner {
     margin: auto;
     text-align: center;
 }
-.txt {
+.dis-txt {
     background-color: white !important;
     border-style: solid !important;
     border-width: 1px !important;
     border-radius: 2px !important;
-    height: 1.5rem !important;
+    height: 25px !important;
     width: 70% !important;
     display: block !important;
     margin: auto !important;
-    color: grey !important;
+    color: #808080 !important;
 }
 .txtctrl {
     background-color: white !important;
@@ -210,4 +211,44 @@ div.banner {
     height: 450px;
     margin-left: auto;
     margin-right: auto;
+}
+.top_left {
+	top: -5px;
+    left: -5px;
+    background-color: white;
+    border: solid 1px black;
+    border-radius: 2px;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+}
+.top_right {
+	top: -5px;
+    right: -5px;
+    background-color: white;
+    border: solid 1px black;
+    border-radius: 2px;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+}
+.bottom_left {
+	bottom: -5px;
+    left: -5px;
+    background-color: white;
+    border: solid 1px black;
+    border-radius: 2px;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+}
+.bottom_right {
+	bottom: -5px;
+    right: -5px;
+    background-color: white;
+    border: solid 1px black;
+    border-radius: 2px;
+    width: 10px;
+    height: 10px;
+    position: absolute;
 }

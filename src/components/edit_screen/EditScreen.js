@@ -51,20 +51,45 @@ class EditScreen extends Component {
         this.controlDivs = [];
         for (var i = 0; i < this.state.controls.length; i++) {
             var control = this.state.controls[i];
-            this.controlDivs.push(
-                <div className={"ctr-" + control.type} 
-                    style={{
-                        backgroundColor: control.background_color,
-                        borderColor: control.border_color,
-                        color: control.text_color,
-                        borderWidth: control.border_thickness,
-                        fontSize: control.fontSize,
-                        width: control.width,
-                        height: control.height
-                    }}
-                >{control.text}</div>
-            );
+            var style = {
+                backgroundColor: control.background_color,
+                borderStyle: "solid",
+                borderColor: control.border_color,
+                borderRadius: control.border_radius,
+                color: control.text_color,
+                borderWidth: control.border_thickness,
+                fontSize: control.font_size,
+                width: control.width,
+                height: control.height,
+                cursor: "pointer",
+                position: "relative",
+                marginBottom: "7px"
+            }
+            if (control.type == "textfield") {
+                style.margin = 0;
+                this.controlDivs.push(
+                    <div style={{position: "relative", width: control.width, height: control.height}} onClick={()=>control.selected=true, this.componentDidMount} >
+                        <input type="text" className="ctr-textfield" defaultValue={control.text} style={style} readOnly></input>
+                        <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
+                        <div className="rect top_right"></div>
+                        <div className="rect bottom_left"></div>
+                        <div className="rect bottom_right"></div>
+                    </div>
+                );
+            }
+            else {
+                style.textAlign = "center";
+                this.controlDivs.push(
+                    <div className={"ctr-" + control.type} style={style} onClick={()=>this.selectControl(control)}>{control.text}
+                        <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
+                        <div className="rect top_right" style={control.selected ? this.showRect : {display: "none"}}></div>
+                        <div className="rect bottom_left" style={control.selected ? this.showRect : {display: "none"}}></div>
+                        <div className="rect bottom_right" style={control.selected ? this.showRect : {display: "none"}}></div>
+                    </div>
+                );
+            }
         }
+
     }
     addContainer = () => {
         const controls = this.state.controls;
@@ -72,23 +97,20 @@ class EditScreen extends Component {
         const container = {
             type: "container",
             id: uniqueID,
-            background_color: "#000000",
-            border_color: "#ffffff",
-            color: "#FFFFFF",
-            border_thickness: 1,
-            border_radius: 1,
+            background_color: "#FFFFFF",
+            border_color: "#000000",
+            text_color: "#FFFFFF",
+            border_thickness: "1px",
+            border_radius: "2px",
             font_size: "0px",
             text: "",
             position_x: 0,
             position_y: 0,
-            width: "100px",
-            height: "50px"
+            width: "115px",
+            height: "60px",
+            selected: false
         }
         controls.push(container);
-        const containerDiv = (
-            <div className="ctr-container" style={{width: "100px", height: "50px", margin: 0}}></div>
-        )
-        this.controlDivs.push(containerDiv);
         this.setState({controls});
         console.log(controls);
     }
@@ -98,25 +120,88 @@ class EditScreen extends Component {
         const label = {
             type: "label",
             id: uniqueID,
-            background_color: "#000000",
+            background_color: "#FFFFFF",
             border_color: "transparent",
-            color: "#FFFFFF",
-            border_thickness: 1,
-            border_radius: 1,
+            text_color: "#000000",
+            border_thickness: "1px",
+            border_radius: "1px",
             font_size: "10pt",
             text: "Prompt for input",
             position_x: 0,
             position_y: 0,
-            width: "100px",
-            height: "50px"
+            width: "150px",
+            height: "25px",
+            selected: false
         }
         controls.push(label);
-        const labelDiv = (
-            <div className="ctr-label" style={{width: "100px", height: "50px", fontSize:"10pt"}}>{label.text}</div>
-        );
-        this.controlDivs.push(labelDiv);
         this.setState({controls});
         console.log(controls);
+    }
+    addButton = () => {
+        const controls = this.state.controls;
+        const uniqueID = uuid.v4();
+        const button = {
+            type: "button",
+            id: uniqueID,
+            background_color: "#d8d8d8",
+            border_color: "#000000",
+            text_color: "#000000",
+            border_thickness: "1px",
+            border_radius: "2px",
+            font_size: "10pt",
+            text: "Submit",
+            position_x: 0,
+            position_y: 0,
+            width: "100px",
+            height: "25px",
+            selected: false
+        }
+        controls.push(button);
+        this.setState({controls});
+        console.log(controls);
+    }
+    addTextfield = () => {
+        const controls = this.state.controls;
+        const uniqueID = uuid.v4();
+        const textfield = {
+            type: "textfield",
+            id: uniqueID,
+            background_color: "#FFFFFF",
+            border_color: "#9e9e9e",
+            text_color: "#808080",
+            border_thickness: "1px",
+            border_radius: "2px",
+            font_size: "12pt",
+            text: "Input",
+            position_x: 0,
+            position_y: 0,
+            width: "170px",
+            height: "25px",
+            selected: false
+        }
+        controls.push(textfield);
+        this.setState({controls});
+        console.log(controls);
+    }
+    selectControl = (control) => {
+        console.log(control);
+        if (this.state.currentControl != null) {
+            for (var i = 0; i < this.state.controls.length; i++) {
+                if (this.state.controls[i].id == this.state.currentControl.id) {
+                    const newControls = this.state.controls;
+                    newControls[i].selected = false;
+                    this.setState({controls: newControls});
+                }
+            }
+        }
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == control.id) {
+                const newControls = this.state.controls;
+                newControls[i].selected = true;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
     }
     saveWork = () => {
         const wireframe = {
@@ -180,25 +265,25 @@ class EditScreen extends Component {
                         </div>
                         <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0 clickable" onClick={()=>this.addContainer()}>
-                            <div className="ctr-container" style={{margin: "auto", width: "50%"}}></div>
+                            <div className="dis-container" style={{margin: "auto", width: "50%"}}></div>
                             <span style={{margin: "auto", display: "table"}}>Container</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0 clickable" onClick={()=>this.addLabel()}>
-                            <span className="lab" style={{margin: "auto", display: "table", fontSize: "12px"}}>Prompt for input:</span>
+                            <span className="dis-label" style={{margin: "auto", display: "table", fontSize: "10pt"}}>Prompt for input:</span>
                             <span style={{margin: "auto", display: "table"}}>Label</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
-                        <div className="row margin-0 clickable">
-                            <div className="but">Submit</div>
+                        <div className="row margin-0 clickable" onClick={()=>this.addButton()}>
+                            <div className="dis-button">Submit</div>
                             <span style={{margin: "auto", display: "table"}}>Button</span>
                         </div>
                         <span>&nbsp;<br/><br/></span>
-                        <div className="row margin-0 clickable">
-                            <input type="text" className="txt" value="Input" disabled></input>
+                        <div className="row margin-0 clickable" onClick={()=>this.addTextfield()}>
+                            <input type="text" className="dis-txt clickable" value="Input" readOnly ></input>
                             <span style={{margin: "auto", display: "table"}}>Textfield</span>
                         </div>
-                        <span style={{fontSize: "12.8pt"}}>&nbsp;<br/><br/><br/></span>
+                        <span style={{fontSize: "13pt"}}>&nbsp;<br/><br/><br/></span>
                     </div>
                     <div className="mid col s6 white">
                         <div className="diagram">
@@ -256,7 +341,7 @@ class EditScreen extends Component {
                             <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Height:</div>
                             <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
                         </div>
-                        <span style={{fontSize: "11pt"}}>&nbsp;<br/></span>
+                        <span style={{fontSize: "11.7pt"}}>&nbsp;<br/></span>
                     </div>
                 </div>
             </div>
