@@ -47,50 +47,6 @@ class EditScreen extends Component {
     changeBordColor = (e) => {
         this.setState({currentBordColor: e.target.value});
     }
-    buildDivs = () => {
-        this.controlDivs = [];
-        for (var i = 0; i < this.state.controls.length; i++) {
-            var control = this.state.controls[i];
-            var style = {
-                backgroundColor: control.background_color,
-                borderStyle: "solid",
-                borderColor: control.border_color,
-                borderRadius: control.border_radius,
-                color: control.text_color,
-                borderWidth: control.border_thickness,
-                fontSize: control.font_size,
-                width: control.width,
-                height: control.height,
-                cursor: "pointer",
-                position: "relative",
-                marginBottom: "7px"
-            }
-            if (control.type == "textfield") {
-                style.margin = 0;
-                this.controlDivs.push(
-                    <div style={{position: "relative", width: control.width, height: control.height}} onClick={()=>control.selected=true, this.componentDidMount} >
-                        <input type="text" className="ctr-textfield" defaultValue={control.text} style={style} readOnly></input>
-                        <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
-                        <div className="rect top_right"></div>
-                        <div className="rect bottom_left"></div>
-                        <div className="rect bottom_right"></div>
-                    </div>
-                );
-            }
-            else {
-                style.textAlign = "center";
-                this.controlDivs.push(
-                    <div className={"ctr-" + control.type} style={style} onClick={()=>this.selectControl(control)}>{control.text}
-                        <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
-                        <div className="rect top_right" style={control.selected ? this.showRect : {display: "none"}}></div>
-                        <div className="rect bottom_left" style={control.selected ? this.showRect : {display: "none"}}></div>
-                        <div className="rect bottom_right" style={control.selected ? this.showRect : {display: "none"}}></div>
-                    </div>
-                );
-            }
-        }
-
-    }
     addContainer = () => {
         const controls = this.state.controls;
         const uniqueID = uuid.v4();
@@ -232,7 +188,6 @@ class EditScreen extends Component {
             return <React.Fragment />;
         if (this.state.redirect)
             return <Redirect push to="/"/>;
-        this.buildDivs();
         return (
             <div className="container white width-100">
                 <div className="row header-style">
@@ -287,7 +242,56 @@ class EditScreen extends Component {
                     </div>
                     <div className="mid col s6 white">
                         <div className="diagram">
-                            {this.controlDivs}
+                            {this.state.controls.map(control => {
+                                if (control.type == "textfield") {
+                                    return(
+                                        <div key={control.id} style={{position: "relative", width: control.width, height: control.height}} onClick={()=>this.selectControl(control)} >
+                                            <input type="text" defaultValue={control.text} readOnly style={{
+                                                backgroundColor: control.background_color,
+                                                borderStyle: "solid",
+                                                borderColor: control.border_color,
+                                                borderRadius: control.border_radius,
+                                                color: control.text_color,
+                                                borderWidth: control.border_thickness,
+                                                fontSize: control.font_size,
+                                                width: control.width,
+                                                height: control.height,
+                                                cursor: "pointer",
+                                                position: "relative",
+                                                marginBottom: "7px"}}>
+                                            </input>
+                                            <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                            <div className="rect top_right" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                            <div className="rect bottom_left" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                            <div className="rect bottom_right" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                        </div>
+                                    );
+                                }
+                                else {
+                                    return(
+                                        <div key={control.id} onClick={()=>this.selectControl(control)} style={{
+                                            backgroundColor: control.background_color,
+                                            borderStyle: "solid",
+                                            borderColor: control.border_color,
+                                            borderRadius: control.border_radius,
+                                            color: control.text_color,
+                                            borderWidth: control.border_thickness,
+                                            fontSize: control.font_size,
+                                            width: control.width,
+                                            height: control.height,
+                                            cursor: "pointer",
+                                            position: "relative",
+                                            textAlign: "center",
+                                            marginBottom: "7px"}}
+                                        >{control.text} 
+                                        <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                        <div className="rect top_right" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                        <div className="rect bottom_left" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                        <div className="rect bottom_right" style={control.selected ? this.showRect : {display: "none"}}></div>
+                                        </div>
+                                    );
+                                }
+                            })}
                         </div>
                     </div>
                     <div className="rightside col s3 grey lighten-3">Properties
