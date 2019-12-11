@@ -236,11 +236,17 @@ class EditScreen extends Component {
         this.setState({currentBordRad: control.border_radius});
         this.setState({currentBordThick: control.border_thickness});
     }
+    unselect = () => {
+        const newControls = this.state.controls;
+        for (var i = 0; i < this.state.controls.length; i++) {
+            newControls[i].selected = false;
+        }
+        this.setState({controls: newControls});
+    }
     updatePos = (e, data) => {
         for (var i = 0; i < this.state.controls.length; i++) {
             if (this.state.controls[i].id == this.state.currentControl.id) {
                 const newControls = this.state.controls;
-                console.log(newControls[i].position_x);
                 newControls[i].position_x = data.x;
                 newControls[i].position_y = data.y;
                 this.setState({controls: newControls});
@@ -249,6 +255,7 @@ class EditScreen extends Component {
         }
     }
     saveWork = () => {
+        this.unselect();
         const wireframe = {
             name: this.state.name,
             owner: this.state.owner,
@@ -330,7 +337,8 @@ class EditScreen extends Component {
                         <span style={{fontSize: "13pt"}}>&nbsp;<br/><br/><br/></span>
                     </div>
                     <div className="mid col s6 white">
-                        <div className="diagram" style={{width: this.state.width+"px", height: this.state.height+"px"}}>
+                        <div className="diagram" onClick={()=>this.unselect()}
+                            style={{width: this.state.width+"px", height: this.state.height+"px"}}>
                             {this.state.controls.map(control => {
                                 const uniqueID = uuid.v4();
                                 control.id = uniqueID;
