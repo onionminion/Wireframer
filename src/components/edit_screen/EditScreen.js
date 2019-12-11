@@ -21,9 +21,14 @@ class EditScreen extends Component {
         width: this.props.wireframe ? this.props.wireframe.width : 0,
         controls: this.props.wireframe ? this.props.wireframe.controls : [],
         currentControl: null,
-        currentBackColor: "black",
-        currentTextColor: "black",
-        currentBordColor: "black",
+        currentText: null,
+        currentFontSize: null,
+        currentBackColor: null,
+        currentTextColor: null,
+        currentBordColor: null,
+        currentBordThick: null,
+        currentBordRad: null,
+        activeProp: false,
         redirect: false
     }
 
@@ -39,14 +44,91 @@ class EditScreen extends Component {
         var wireframe = { ...state };
         props.update(wireframe);
     }
+    changeText = (e) => {
+        this.setState({currentText: e.target.value});
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].text = e.target.value;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
+    }
     changeBackColor = (e) => {
         this.setState({currentBackColor: e.target.value});
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].background_color = e.target.value;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
     }
     changeTextColor = (e) => {
         this.setState({currentTextColor: e.target.value});
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].text_color = e.target.value;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
     }
     changeBordColor = (e) => {
         this.setState({currentBordColor: e.target.value});
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].border_color = e.target.value;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
+    }
+    changeBordThick = (e) => {
+        var thickness = 0;
+        if (e.target.value!="") 
+            thickness = e.target.value;
+        this.setState({currentBordThick: e.target.value});
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].border_thickness = thickness;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
+    }
+    changeBordRad = (e) => {
+        var rad = 0;
+        if (e.target.value!="") 
+            rad = e.target.value;
+        this.setState({currentBordRad: e.target.value});
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].border_radius = rad;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
+    }
+    changeFontSize = (e) => {
+        var size = 0;
+        if (e.target.value!="") 
+            size = e.target.value;
+        this.setState({currentFontSize: e.target.value});
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].font_size = size;
+                this.setState({controls: newControls});
+                this.setState({currentControl: newControls[i]});
+            }
+        }
     }
     addContainer = () => {
         const controls = this.state.controls;
@@ -55,9 +137,9 @@ class EditScreen extends Component {
             background_color: "#FFFFFF",
             border_color: "#000000",
             text_color: "#FFFFFF",
-            border_thickness: "1px",
-            border_radius: "2px",
-            font_size: "0px",
+            border_thickness: 1,
+            border_radius: 2,
+            font_size: 0,
             text: "",
             position_x: 0,
             position_y: 0,
@@ -67,7 +149,6 @@ class EditScreen extends Component {
         }
         controls.push(container);
         this.setState({controls});
-        console.log(controls);
     }
     addLabel = () => {
         const controls = this.state.controls;
@@ -76,9 +157,9 @@ class EditScreen extends Component {
             background_color: "#FFFFFF",
             border_color: "transparent",
             text_color: "#000000",
-            border_thickness: "1px",
-            border_radius: "1px",
-            font_size: "10pt",
+            border_thickness: 1,
+            border_radius: 1,
+            font_size: 10,
             text: "Prompt for input",
             position_x: 0,
             position_y: 0,
@@ -88,7 +169,6 @@ class EditScreen extends Component {
         }
         controls.push(label);
         this.setState({controls});
-        console.log(controls);
     }
     addButton = () => {
         const controls = this.state.controls;
@@ -97,9 +177,9 @@ class EditScreen extends Component {
             background_color: "#d8d8d8",
             border_color: "#000000",
             text_color: "#000000",
-            border_thickness: "1px",
-            border_radius: "2px",
-            font_size: "10pt",
+            border_thickness: 1,
+            border_radius: 2,
+            font_size: 10,
             text: "Submit",
             position_x: 0,
             position_y: 0,
@@ -109,7 +189,6 @@ class EditScreen extends Component {
         }
         controls.push(button);
         this.setState({controls});
-        console.log(controls);
     }
     addTextfield = () => {
         const controls = this.state.controls;
@@ -118,9 +197,9 @@ class EditScreen extends Component {
             background_color: "#FFFFFF",
             border_color: "#9e9e9e",
             text_color: "#808080",
-            border_thickness: "1px",
-            border_radius: "2px",
-            font_size: "12pt",
+            border_thickness: 1,
+            border_radius: 2,
+            font_size: 12,
             text: "Input",
             position_x: 0,
             position_y: 0,
@@ -130,10 +209,9 @@ class EditScreen extends Component {
         }
         controls.push(textfield);
         this.setState({controls});
-        console.log(controls);
     }
     selectControl = (control) => {
-        console.log(control);
+        this.setState({activeProp: true});
         if (this.state.currentControl != null) {
             for (var i = 0; i < this.state.controls.length; i++) {
                 if (this.state.controls[i].id == this.state.currentControl.id) {
@@ -151,6 +229,13 @@ class EditScreen extends Component {
                 this.setState({currentControl: newControls[i]});
             }
         }
+        this.setState({currentText: control.text});
+        this.setState({currentFontSize: control.font_size});
+        this.setState({currentBackColor: control.background_color});
+        this.setState({currentBordColor: control.border_color});
+        this.setState({currentTextColor: control.text_color});
+        this.setState({currentBordRad: control.border_radius});
+        this.setState({currentBordThick: control.border_thickness});
     }
     saveWork = () => {
         const wireframe = {
@@ -246,10 +331,10 @@ class EditScreen extends Component {
                                                     backgroundColor: control.background_color,
                                                     borderStyle: "solid",
                                                     borderColor: control.border_color,
-                                                    borderRadius: control.border_radius,
+                                                    borderRadius: control.border_radius + "px",
                                                     color: control.text_color,
-                                                    borderWidth: control.border_thickness,
-                                                    fontSize: control.font_size,
+                                                    borderWidth: control.border_thickness + "px",
+                                                    fontSize: control.font_size + "pt",
                                                     width: control.width,
                                                     height: control.height,
                                                     cursor: "pointer",
@@ -271,10 +356,10 @@ class EditScreen extends Component {
                                                 backgroundColor: control.background_color,
                                                 borderStyle: "solid",
                                                 borderColor: control.border_color,
-                                                borderRadius: control.border_radius,
+                                                borderRadius: control.border_radius + "px",
                                                 color: control.text_color,
-                                                borderWidth: control.border_thickness,
-                                                fontSize: control.font_size,
+                                                borderWidth: control.border_thickness + "px",
+                                                fontSize: control.font_size + "pt",
                                                 width: control.width,
                                                 height: control.height,
                                                 cursor: "pointer",
@@ -296,12 +381,13 @@ class EditScreen extends Component {
                     <div className="rightside col s3 grey lighten-3">Properties
                         <span>&nbsp;<br/><br/></span>
                         <div className="row margin-0">
-                            <input type="text" className="txtctrl" value="value"></input>
+                            <input type="text" className="txtctrl" value={this.state.currentText} onChange={(e)=>this.changeText(e)}></input>
                         </div>
                         <span>&nbsp;<br/></span>
                         <div className="row margin-0">
                             <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Font Size:</div>
-                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
+                            <input type="text" id="font" className="col s3 offset-s2 txtfont" 
+                                value={this.state.currentFontSize} onChange={(e)=>this.changeFontSize(e)}></input>
                         </div>
                         <span>&nbsp;<br/></span>
                         <div className="row margin-0">
@@ -327,12 +413,16 @@ class EditScreen extends Component {
                         <span>&nbsp;<br/></span>
                         <div className="row margin-0">
                             <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Border Thickness:</div>
-                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value" style={{marginTop: "4.4%"}}></input>
+                            <input type="text" id="font" className="col s3 offset-s2 txtfont" 
+                                value={this.state.currentBordThick} onChange={(e)=>this.changeBordThick(e)} 
+                                style={{marginTop: "4.4%"}}></input>
                         </div>
                         <span>&nbsp;<br/></span>
                         <div className="row margin-0">
                             <div className="col s7" style={{fontSize: "10pt", marginTop: "0.5%"} }>Border Radius:</div>
-                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value" style={{marginTop: "4.4%"}}></input>
+                            <input type="text" id="font" className="col s3 offset-s2 txtfont" 
+                                value={this.state.currentBordRad} onChange={(e)=>this.changeBordRad(e)}
+                                style={{marginTop: "4.4%"}}></input>
                         </div>
                         <span>&nbsp;<br/></span>
                         <div className="row margin-0">
