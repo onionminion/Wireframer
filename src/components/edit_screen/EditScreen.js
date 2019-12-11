@@ -8,6 +8,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { updateWireframeHandler } from '../../store/database/asynchHandler';
 import uuid from 'uuid';
 import { Modal, Button } from 'react-materialize';
+import Draggable from 'react-draggable';
 
 
 class EditScreen extends Component {
@@ -239,8 +240,34 @@ class EditScreen extends Component {
                                 control.id = uniqueID;
                                 if (control.type == "textfield") {
                                     return(
-                                        <div key={control.id} style={{position: "relative", width: control.width, height: control.height}} onClick={()=>this.selectControl(control)} >
-                                            <input type="text" defaultValue={control.text} readOnly style={{
+                                        <Draggable onStart={()=>this.selectControl(control)}>
+                                            <div key={control.id} style={{position: "relative", width: control.width, height: control.height}} >
+                                                <input type="text" defaultValue={control.text} readOnly style={{
+                                                    backgroundColor: control.background_color,
+                                                    borderStyle: "solid",
+                                                    borderColor: control.border_color,
+                                                    borderRadius: control.border_radius,
+                                                    color: control.text_color,
+                                                    borderWidth: control.border_thickness,
+                                                    fontSize: control.font_size,
+                                                    width: control.width,
+                                                    height: control.height,
+                                                    cursor: "pointer",
+                                                    position: "relative",
+                                                    marginBottom: "7px"}}>
+                                                </input>
+                                                <div className="rect top_left" style={control.selected ? null : {display: "none"}}></div>
+                                                <div className="rect top_right" style={control.selected ? null : {display: "none"}}></div>
+                                                <div className="rect bottom_left" style={control.selected ? null : {display: "none"}}></div>
+                                                <div className="rect bottom_right" style={control.selected ? null : {display: "none"}}></div>
+                                            </div>
+                                        </Draggable>
+                                    );
+                                }
+                                else {
+                                    return(
+                                        <Draggable onStart={()=>this.selectControl(control)}>
+                                            <div key={control.id} onClick={()=>this.selectControl(control)} style={{
                                                 backgroundColor: control.background_color,
                                                 borderStyle: "solid",
                                                 borderColor: control.border_color,
@@ -252,37 +279,15 @@ class EditScreen extends Component {
                                                 height: control.height,
                                                 cursor: "pointer",
                                                 position: "relative",
-                                                marginBottom: "7px"}}>
-                                            </input>
-                                            <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                            <div className="rect top_right" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                            <div className="rect bottom_left" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                            <div className="rect bottom_right" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                        </div>
-                                    );
-                                }
-                                else {
-                                    return(
-                                        <div key={control.id} onClick={()=>this.selectControl(control)} style={{
-                                            backgroundColor: control.background_color,
-                                            borderStyle: "solid",
-                                            borderColor: control.border_color,
-                                            borderRadius: control.border_radius,
-                                            color: control.text_color,
-                                            borderWidth: control.border_thickness,
-                                            fontSize: control.font_size,
-                                            width: control.width,
-                                            height: control.height,
-                                            cursor: "pointer",
-                                            position: "relative",
-                                            textAlign: "center",
-                                            marginBottom: "7px"}}
-                                        >{control.text} 
-                                        <div className="rect top_left" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                        <div className="rect top_right" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                        <div className="rect bottom_left" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                        <div className="rect bottom_right" style={control.selected ? this.showRect : {display: "none"}}></div>
-                                        </div>
+                                                textAlign: "center",
+                                                marginBottom: "7px"}}
+                                            >{control.text} 
+                                            <div className="rect top_left" style={control.selected ? null : {display: "none"}}></div>
+                                            <div className="rect top_right" style={control.selected ? null : {display: "none"}}></div>
+                                            <div className="rect bottom_left" style={control.selected ? null : {display: "none"}}></div>
+                                            <div className="rect bottom_right" style={control.selected ? null : {display: "none"}}></div>
+                                            </div>
+                                        </Draggable>
                                     );
                                 }
                             })}
