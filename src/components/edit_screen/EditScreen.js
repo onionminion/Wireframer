@@ -240,6 +240,7 @@ class EditScreen extends Component {
     }
     deleteControl = (e) => {
         if (e.key == "Delete" && this.state.currentControl != null) {
+            e.preventDefault();
             const newControls = [];
             for (var i = 0; i < this.state.controls.length; i++) {
                 if (this.state.controls[i].id != this.state.currentControl.id) {
@@ -249,6 +250,22 @@ class EditScreen extends Component {
             this.setState({ controls: newControls });
             this.setState({ saved: false });
             this.unselect();
+        }
+    }
+    duplicateControl = (e) => {
+        if (e.ctrlKey && e.key == "d" ) {
+            console.log("ctrl-d pressed");
+            const uniqueID = uuid.v4();
+            e.preventDefault();
+            const controlCopy = {...this.state.currentControl};
+            controlCopy.position_x += 100;
+            controlCopy.position_y += 100;
+            controlCopy.id = uniqueID;
+            const newControls = this.state.controls;
+            newControls.push(controlCopy);
+            this.setState({ controls: newControls });
+            this.selectControl(controlCopy);
+            this.setState({ saved: false });
         }
     }
     selectControl = (control) => {
@@ -344,6 +361,7 @@ class EditScreen extends Component {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
         document.onkeyup = this.deleteControl;
+        document.onkeydown = this.duplicateControl;
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
@@ -402,7 +420,6 @@ class EditScreen extends Component {
                             <input type="text" className="dis-txt clickable" value="Input" readOnly ></input>
                             <span style={{ margin: "auto", display: "table" }}>Textfield</span>
                         </div>
-
                         <span style={{ fontSize: "13pt" }}>&nbsp;<br /><br /><br /></span>
                     </div>
                     <div className="mid col s6 white no-padding">
@@ -413,8 +430,16 @@ class EditScreen extends Component {
                                 control.id = uniqueID;
                                 if (control.type == "textfield") {
                                     return (
-                                        <Draggable onStart={() => this.selectControl(control)} onDrag={(e, data) => this.updatePos(e, data)}
-                                            bounds="parent" position={{ x: control.position_x, y: control.position_y }}>
+                                        <Rnd size={{ width: control.width, height: control.height }}
+                                            onDragStart={() => this.selectControl(control)}
+                                            onDrag={() => this.selectControl(control)}
+                                            onDragStop={(e, data) => { this.updatePos(e, data); this.selectControl(control); }}
+                                            position={{ x: control.position_x, y: control.position_y }}
+                                            bounds="parent"
+                                            enableResizing={{ top: false, right: false, bottom: false, left: false, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true }}
+                                            onResizeStart={() => this.selectControl(control)}
+                                            onResize={() => this.selectControl(control)}
+                                            onResizeStop={(e, direction, ref, delta, position) => this.updateSize(ref, position)}>
                                             <div key={control.id} style={{ position: "relative", width: control.width, height: control.height }} >
                                                 <input type="text" defaultValue={control.text} readOnly style={{
                                                     backgroundColor: control.background_color,
@@ -436,7 +461,7 @@ class EditScreen extends Component {
                                                 <div className="rect bottom_left" style={control.selected ? null : { display: "none" }}></div>
                                                 <div className="rect bottom_right" style={control.selected ? null : { display: "none" }}></div>
                                             </div>
-                                        </Draggable>
+                                        </Rnd>
                                     );
                                 }
                                 else {
@@ -450,8 +475,7 @@ class EditScreen extends Component {
                                             enableResizing={{ top: false, right: false, bottom: false, left: false, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true }}
                                             onResizeStart={() => this.selectControl(control)}
                                             onResize={() => this.selectControl(control)}
-                                            onResizeStop={(e, direction, ref, delta, position) =>
-                                                this.updateSize(ref, position)}>
+                                            onResizeStop={(e, direction, ref, delta, position) => this.updateSize(ref, position)}>
                                             <div key={control.id} style={{
                                                 backgroundColor: control.background_color,
                                                 borderStyle: "solid",
