@@ -16,8 +16,8 @@ class EditScreen extends Component {
         name: this.props.wireframe ? this.props.wireframe.name : "",
         owner: this.props.wireframe ? this.props.wireframe.owner : "",
         id: this.props.wireframe ? this.props.wireframe.id : "",
-        height: this.props.wireframe ? this.props.wireframe.height : 450,
-        width: this.props.wireframe ? this.props.wireframe.width : 450,
+        height: this.props.wireframe ? this.props.wireframe.height : 4500,
+        width: this.props.wireframe ? this.props.wireframe.width : 4500,
         controls: this.props.wireframe ? this.props.wireframe.controls : [],
         currentControl: null,
         currentText: null,
@@ -28,9 +28,11 @@ class EditScreen extends Component {
         currentBordThick: null,
         currentBordRad: null,
         saved: true,
+        disWidth: this.props.wireframe ? this.props.wireframe.width : 4500,
+        disHeight: this.props.wireframe ? this.props.wireframe.height : 4500,
+        updateDims: false,
         redirect: false
     }
-
     updateFields = (e) => {
         const { target } = e;
         this.setState(state => ({
@@ -137,6 +139,21 @@ class EditScreen extends Component {
             }
         }
     }
+    changeWidth = (e) => {
+        this.setState({disWidth: e.target.value});
+        this.setState({updateDims: true});
+    }
+    changeHeight = (e) => {
+        this.setState({disHeight: e.target.value});
+        this.setState({updateDims: true});
+    }
+    updateDims = () => {
+        if (this.state.disWidth != "" && Number.isInteger(+this.state.disWidth) && (+this.state.disWidth >= 1) && (+this.state.disWidth <= 5000)
+            && this.state.disHeight != "" && Number.isInteger(+this.state.disHeight) && (+this.state.disHeight >= 1) && (+this.state.disHeight <= 5000)) {
+            this.setState({width: this.state.disWidth});
+            this.setState({height: this.state.disHeight});
+        }
+    }
     addContainer = () => {
         const controls = this.state.controls;
         const container = {
@@ -222,7 +239,6 @@ class EditScreen extends Component {
         this.setState({ saved: false });
     }
     deleteControl = (e) => {
-        console.log(e.key);
         if (e.key == "Delete" && this.state.currentControl != null) {
             const newControls = [];
             for (var i = 0; i < this.state.controls.length; i++) {
@@ -268,6 +284,13 @@ class EditScreen extends Component {
         }
         this.setState({currentControl: null});
         this.setState({controls: newControls});
+        this.setState({currentText: ""});
+        this.setState({currentFontSize: ""});
+        this.setState({currentBackColor: ""});
+        this.setState({currentBordColor: ""});
+        this.setState({currentTextColor: ""});
+        this.setState({currentBordRad: ""});
+        this.setState({currentBordThick: ""});
     }
     updatePos = (e, data) => {
         for (var i = 0; i < this.state.controls.length; i++) {
@@ -366,9 +389,9 @@ class EditScreen extends Component {
                         </div>
                         <span style={{ fontSize: "13pt" }}>&nbsp;<br /><br /><br /></span>
                     </div>
-                    <div className="mid col s6 white">
+                    <div className="mid col s6 white no-padding">
                         <div className="diagram" onClick={() => this.unselect()}
-                            style={{ width: this.state.width + "px", height: this.state.height + "px" }}>
+                            style={{ width: this.state.width/10 + "px", height: this.state.height/10 + "px" }}>
                             {this.state.controls.map(control => {
                                 const uniqueID = uuid.v4();
                                 control.id = uniqueID;
@@ -476,14 +499,19 @@ class EditScreen extends Component {
                                 style={{ marginTop: "4.4%" }}></input>
                         </div>
                         <span>&nbsp;<br /></span>
-                        <div className="row margin-0">
-                            <div className="col s7" style={{ fontSize: "10pt", marginTop: "0.5%" }}>Width:</div>
-                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
-                        </div>
-                        <span>&nbsp;<br /></span>
-                        <div className="row margin-0">
-                            <div className="col s7" style={{ fontSize: "10pt", marginTop: "0.5%" }}>Height:</div>
-                            <input type="text" id="font" className="col s3 offset-s2 txtfont" value="value"></input>
+                        <div className="row margin-0" style={{backgroundColor: "white"}}>
+                            <span style={{margin:"auto", display: "table"}}>Wireframe Dimensions</span>
+                            <div className="row margin-0">
+                                <div className="col s7" style={{ fontSize: "10pt", marginTop: "0.5%" }}>Width:</div>
+                                <input type="text" id="font" className="col s3 offset-s2 txtfont" 
+                                    value={this.state.disWidth} onChange={(e) => this.changeWidth(e)}></input>
+                            </div>
+                            <div className="row margin-0">
+                                <div className="col s7" style={{ fontSize: "10pt", marginTop: "0.5%" }}>Height:</div>
+                                <input type="text" id="font" className="col s3 offset-s2 txtfont" 
+                                    value={this.state.disHeight} onChange={(e) => this.changeHeight(e)}></input>
+                            </div>
+                            <Button onClick={() => this.updateDims()} disabled={!this.state.updateDims} style={{backgroundColor: "#ae585e", margin:"auto", display: "table"}}>Update Dimensions</Button>
                         </div>
                         <span style={{ fontSize: "11.7pt" }}>&nbsp;<br /></span>
                     </div>
