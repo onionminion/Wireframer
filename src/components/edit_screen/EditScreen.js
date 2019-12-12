@@ -9,7 +9,7 @@ import { updateWireframeHandler } from '../../store/database/asynchHandler';
 import uuid from 'uuid';
 import { Modal, Button } from 'react-materialize';
 import Draggable from 'react-draggable';
-
+import { Rnd } from 'react-rnd';
 
 class EditScreen extends Component {
     state = {
@@ -140,18 +140,18 @@ class EditScreen extends Component {
         }
     }
     changeWidth = (e) => {
-        this.setState({disWidth: e.target.value});
-        this.setState({updateDims: true});
+        this.setState({ disWidth: e.target.value });
+        this.setState({ updateDims: true });
     }
     changeHeight = (e) => {
-        this.setState({disHeight: e.target.value});
-        this.setState({updateDims: true});
+        this.setState({ disHeight: e.target.value });
+        this.setState({ updateDims: true });
     }
     updateDims = () => {
         if (this.state.disWidth != "" && Number.isInteger(+this.state.disWidth) && (+this.state.disWidth >= 1) && (+this.state.disWidth <= 5000)
             && this.state.disHeight != "" && Number.isInteger(+this.state.disHeight) && (+this.state.disHeight >= 1) && (+this.state.disHeight <= 5000)) {
-            this.setState({width: this.state.disWidth});
-            this.setState({height: this.state.disHeight});
+            this.setState({ width: this.state.disWidth });
+            this.setState({ height: this.state.disHeight });
         }
     }
     addContainer = () => {
@@ -282,15 +282,15 @@ class EditScreen extends Component {
         for (var i = 0; i < this.state.controls.length; i++) {
             newControls[i].selected = false;
         }
-        this.setState({currentControl: null});
-        this.setState({controls: newControls});
-        this.setState({currentText: ""});
-        this.setState({currentFontSize: ""});
-        this.setState({currentBackColor: ""});
-        this.setState({currentBordColor: ""});
-        this.setState({currentTextColor: ""});
-        this.setState({currentBordRad: ""});
-        this.setState({currentBordThick: ""});
+        this.setState({ currentControl: null });
+        this.setState({ controls: newControls });
+        this.setState({ currentText: "" });
+        this.setState({ currentFontSize: "" });
+        this.setState({ currentBackColor: "" });
+        this.setState({ currentBordColor: "" });
+        this.setState({ currentTextColor: "" });
+        this.setState({ currentBordRad: "" });
+        this.setState({ currentBordThick: "" });
     }
     updatePos = (e, data) => {
         for (var i = 0; i < this.state.controls.length; i++) {
@@ -304,6 +304,21 @@ class EditScreen extends Component {
             }
         }
     }
+    updateSize = (ref, position) => {
+        for (var i = 0; i < this.state.controls.length; i++) {
+            if (this.state.controls[i].id == this.state.currentControl.id) {
+                const newControls = this.state.controls;
+                newControls[i].position_x = position.x;
+                newControls[i].position_y = position.y;
+                newControls[i].width = ref.style.width;
+                newControls[i].height = ref.style.height;
+                this.setState({ controls: newControls });
+                this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
+            }
+        }
+    }
+
     saveWork = () => {
         this.unselect();
         this.setState({ saved: true });
@@ -358,13 +373,13 @@ class EditScreen extends Component {
                             </div>
                             <div className="col s3 save clickable" onClick={() => this.saveWork()}><span>Save</span></div>
                             <div className="col s3 save clickable">
-                                {this.state.saved ? <span onClick={()=>this.close()}>Close</span> :
-                                <Modal header="Close Edit Screen" trigger={<span>Close</span>} className="modal-style" actions={
-                                    <div>
-                                        <Button waves="green" modal="close" flat onClick={() => this.saveBeforeClose()}>Save</Button>
-                                        <Button waves="red" modal="close" flat onClick={() => this.close()}>Close without saving</Button>
-                                    </div>
-                                }>Do you want to save your work before closing?</Modal>}
+                                {this.state.saved ? <span onClick={() => this.close()}>Close</span> :
+                                    <Modal header="Close Edit Screen" trigger={<span>Close</span>} className="modal-style" actions={
+                                        <div>
+                                            <Button waves="green" modal="close" flat onClick={() => this.saveBeforeClose()}>Save</Button>
+                                            <Button waves="red" modal="close" flat onClick={() => this.close()}>Close without saving</Button>
+                                        </div>
+                                    }>Do you want to save your work before closing?</Modal>}
                             </div>
                         </div>
                         <span>&nbsp;<br /><br /></span>
@@ -387,11 +402,12 @@ class EditScreen extends Component {
                             <input type="text" className="dis-txt clickable" value="Input" readOnly ></input>
                             <span style={{ margin: "auto", display: "table" }}>Textfield</span>
                         </div>
+
                         <span style={{ fontSize: "13pt" }}>&nbsp;<br /><br /><br /></span>
                     </div>
                     <div className="mid col s6 white no-padding">
                         <div className="diagram" onClick={() => this.unselect()}
-                            style={{ width: this.state.width/10 + "px", height: this.state.height/10 + "px" }}>
+                            style={{ width: this.state.width / 10 + "px", height: this.state.height / 10 + "px" }}>
                             {this.state.controls.map(control => {
                                 const uniqueID = uuid.v4();
                                 control.id = uniqueID;
@@ -425,28 +441,37 @@ class EditScreen extends Component {
                                 }
                                 else {
                                     return (
-                                        <Draggable onStart={() => this.selectControl(control)} onDrag={(e, data) => this.updatePos(e, data)}
-                                            bounds="parent" position={{ x: control.position_x, y: control.position_y }}>
-                                            <div key={control.id} onClick={() => this.selectControl(control)} style={{
-                                                    backgroundColor: control.background_color,
-                                                    borderStyle: "solid",
-                                                    borderColor: control.border_color,
-                                                    borderRadius: control.border_radius + "px",
-                                                    color: control.text_color,
-                                                    borderWidth: control.border_thickness + "px",
-                                                    fontSize: control.font_size + "pt",
-                                                    width: control.width,
-                                                    height: control.height,
-                                                    cursor: "pointer",
-                                                    position: "absolute",
-                                                    textAlign: "center"
-                                                }}>{control.text}
+                                        <Rnd size={{ width: control.width, height: control.height }}
+                                            onDragStart={() => this.selectControl(control)}
+                                            onDrag={() => this.selectControl(control)}
+                                            onDragStop={(e, data) => { this.updatePos(e, data); this.selectControl(control); }}
+                                            position={{ x: control.position_x, y: control.position_y }}
+                                            bounds="parent"
+                                            enableResizing={{ top: false, right: false, bottom: false, left: false, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true }}
+                                            onResizeStart={() => this.selectControl(control)}
+                                            onResize={() => this.selectControl(control)}
+                                            onResizeStop={(e, direction, ref, delta, position) =>
+                                                this.updateSize(ref, position)}>
+                                            <div key={control.id} style={{
+                                                backgroundColor: control.background_color,
+                                                borderStyle: "solid",
+                                                borderColor: control.border_color,
+                                                borderRadius: control.border_radius + "px",
+                                                color: control.text_color,
+                                                borderWidth: control.border_thickness + "px",
+                                                fontSize: control.font_size + "pt",
+                                                width: control.width,
+                                                height: control.height,
+                                                cursor: "pointer",
+                                                position: "absolute",
+                                                textAlign: "center"
+                                            }}>{control.text}
                                                 <div className="rect top_left" style={control.selected ? null : { display: "none" }}></div>
                                                 <div className="rect top_right" style={control.selected ? null : { display: "none" }}></div>
                                                 <div className="rect bottom_left" style={control.selected ? null : { display: "none" }}></div>
                                                 <div className="rect bottom_right" style={control.selected ? null : { display: "none" }}></div>
                                             </div>
-                                        </Draggable>
+                                        </Rnd>
                                     );
                                 }
                             })}
@@ -499,22 +524,25 @@ class EditScreen extends Component {
                                 style={{ marginTop: "4.4%" }}></input>
                         </div>
                         <span>&nbsp;<br /></span>
-                        <div className="row margin-0" style={{backgroundColor: "white"}}>
-                            <span style={{margin:"auto", display: "table"}}>Wireframe Dimensions</span>
+                        <div className="row margin-0" style={{ backgroundColor: "white" }}>
+                            <span style={{ margin: "auto", display: "table" }}>Wireframe Dimensions</span>
                             <div className="row margin-0">
                                 <div className="col s7" style={{ fontSize: "10pt", marginTop: "0.5%" }}>Width:</div>
-                                <input type="text" id="font" className="col s3 offset-s2 txtfont" 
+                                <input type="text" id="font" className="col s3 offset-s2 txtfont"
                                     value={this.state.disWidth} onChange={(e) => this.changeWidth(e)}></input>
                             </div>
                             <div className="row margin-0">
                                 <div className="col s7" style={{ fontSize: "10pt", marginTop: "0.5%" }}>Height:</div>
-                                <input type="text" id="font" className="col s3 offset-s2 txtfont" 
+                                <input type="text" id="font" className="col s3 offset-s2 txtfont"
                                     value={this.state.disHeight} onChange={(e) => this.changeHeight(e)}></input>
                             </div>
-                            <Button onClick={() => this.updateDims()} disabled={!this.state.updateDims} style={{backgroundColor: "#ae585e", margin:"auto", display: "table"}}>Update Dimensions</Button>
+                            <Button onClick={() => this.updateDims()} disabled={!this.state.updateDims}
+                                style={{ backgroundColor: "#ae585e", margin: "auto", display: "table" }}>Update Dimensions
+                            </Button>
                         </div>
                         <span style={{ fontSize: "11.7pt" }}>&nbsp;<br /></span>
                     </div>
+
                 </div>
             </div>
         );
