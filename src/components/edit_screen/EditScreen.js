@@ -9,6 +9,7 @@ import { updateWireframeHandler } from '../../store/database/asynchHandler';
 import uuid from 'uuid';
 import { Modal, Button } from 'react-materialize';
 import { Rnd } from 'react-rnd';
+import { transform } from '@babel/core';
 
 class EditScreen extends Component {
     state = {
@@ -30,7 +31,8 @@ class EditScreen extends Component {
         disWidth: this.props.wireframe ? this.props.wireframe.width : 4500,
         disHeight: this.props.wireframe ? this.props.wireframe.height : 4500,
         updateDims: false,
-        redirect: false
+        redirect: false,
+        zoomNum: 1.0
     }
     updateFields = (e) => {
         const { target } = e;
@@ -268,7 +270,7 @@ class EditScreen extends Component {
         }
     }
     selectControl = (control) => {
-        if (this.state.currentControl != null) {
+        if (this.state.currentControl != null && this.state.currentControl.id != control.id) {
             for (var i = 0; i < this.state.controls.length; i++) {
                 if (this.state.controls[i].id == this.state.currentControl.id) {
                     const newControls = this.state.controls;
@@ -277,6 +279,7 @@ class EditScreen extends Component {
                 }
             }
         }
+
         for (var i = 0; i < this.state.controls.length; i++) {
             if (this.state.controls[i].id == control.id) {
                 const newControls = this.state.controls;
@@ -284,7 +287,7 @@ class EditScreen extends Component {
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
             }
-        }
+        }   
         this.setState({ currentText: control.text });
         this.setState({ currentFontSize: control.font_size });
         this.setState({ currentBackColor: control.background_color });
@@ -298,15 +301,16 @@ class EditScreen extends Component {
         for (var i = 0; i < this.state.controls.length; i++) {
             newControls[i].selected = false;
         }
-        this.setState({ currentControl: null });
-        this.setState({ controls: newControls });
-        this.setState({ currentText: "" });
-        this.setState({ currentFontSize: "" });
-        this.setState({ currentBackColor: "" });
-        this.setState({ currentBordColor: "" });
-        this.setState({ currentTextColor: "" });
-        this.setState({ currentBordRad: "" });
-        this.setState({ currentBordThick: "" });
+        // this.setState({ currentControl: null });
+        // this.setState({ currentText: "" });
+        // this.setState({ currentFontSize: "" });
+        // this.setState({ currentBackColor: "" });
+        // this.setState({ currentBordColor: "" });
+        // this.setState({ currentTextColor: "" });
+        // this.setState({ currentBordRad: "" });
+        // this.setState({ currentBordThick: "" });
+        // this.setState({ controls: newControls });
+
     }
     updatePos = (e, data) => {
         for (var i = 0; i < this.state.controls.length; i++) {
@@ -331,10 +335,18 @@ class EditScreen extends Component {
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
                 this.setState({ saved: false });
+                this.selectControl(newControls[i]);
             }
         }
     }
-
+    zoom = (type, int) => {
+        if (type=="in") {
+            this.setState({zoomNum: this.state.zoomNum*2.0});
+        }
+        else {
+            this.setState({zoomNum: this.state.zoomNum/2.0});
+        }
+    }
     saveWork = () => {
         this.unselect();
         this.setState({ saved: true });
@@ -345,6 +357,7 @@ class EditScreen extends Component {
             height: this.state.height,
             width: this.state.width,
             controls: this.state.controls,
+            time: Date.now()
         }
         this.props.update(wireframe);
     }
@@ -370,23 +383,12 @@ class EditScreen extends Component {
             return <Redirect push to="/" />;
         return (
             <div className="container white width-100">
-                <div className="row header-style">
-                    <div className="col s11 grey-text text-darken-3 font-17">Todo List</div>
-                </div>
-                <div className="input-field padding-17">
-                    <label htmlFor="name" className="active padding-17">Name</label>
-                    <input className="active" type="text" name="name" id="name" onChange={this.updateFields} defaultValue={wireframe.name} />
-                </div>
-                <div className="input-field padding-17">
-                    <label htmlFor="owner" className="active padding-17">Owner</label>
-                    <input className="active" type="text" name="owner" id="owner" onChange={this.updateFields} defaultValue={wireframe.owner} />
-                </div>
                 <div className="row">
                     <div className="leftside col s3 grey lighten-3 zoom">
                         <div className="row margin-0">
                             <div className="col s5 grey lighten-3 no-padding">
-                                <input type="image" src={ZoomIn} />
-                                <input type="image" src={ZoomOut} />
+                                <input type="image" src={ZoomIn} onClick={()=> this.zoom("in", 1)}/>
+                                <input type="image" src={ZoomOut} onClick={()=> this.zoom("out", -1)}/>
                             </div>
                             <div className="col s3 save clickable" onClick={() => this.saveWork()}><span>Save</span></div>
                             <div className="col s3 save clickable">
@@ -421,9 +423,10 @@ class EditScreen extends Component {
                         </div>
                         <span style={{ fontSize: "13pt" }}>&nbsp;<br /><br /><br /></span>
                     </div>
-                    <div className="mid col s6 white no-padding">
+                    <div className="mid col s6 white no-padding" style={{overflow: "auto"}}>
                         <div className="diagram" onClick={() => this.unselect()}
-                            style={{ width: this.state.width / 10 + "px", height: this.state.height / 10 + "px" }}>
+                            style={{ width: this.state.width / 10 + "px", height: this.state.height / 10 + "px", 
+                            transform: `scale( ${this.state.zoomNum} )`, transformOrigin: "0 0"}}>
                             {this.state.controls.map(control => {
                                 const uniqueID = uuid.v4();
                                 control.id = uniqueID;
@@ -431,14 +434,12 @@ class EditScreen extends Component {
                                     return (
                                         <Rnd size={{ width: control.width, height: control.height }}
                                             onDragStart={() => this.selectControl(control)}
-                                            onDrag={() => this.selectControl(control)}
                                             onDragStop={(e, data) => { this.updatePos(e, data); this.selectControl(control); }}
                                             position={{ x: control.position_x, y: control.position_y }}
                                             bounds="parent"
                                             enableResizing={{ top: false, right: false, bottom: false, left: false, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true }}
                                             onResizeStart={() => this.selectControl(control)}
-                                            onResize={() => this.selectControl(control)}
-                                            onResizeStop={(e, direction, ref, delta, position) => this.updateSize(ref, position)}>
+                                            onResize={(e, direction, ref, delta, position) => this.updateSize(ref, position)}>
                                             <div key={control.id} style={{ position: "relative", width: control.width, height: control.height }} >
                                                 <input type="text" defaultValue={control.text} readOnly style={{
                                                     backgroundColor: control.background_color,
@@ -467,14 +468,12 @@ class EditScreen extends Component {
                                     return (
                                         <Rnd size={{ width: control.width, height: control.height }}
                                             onDragStart={() => this.selectControl(control)}
-                                            onDrag={() => this.selectControl(control)}
                                             onDragStop={(e, data) => { this.updatePos(e, data); this.selectControl(control); }}
                                             position={{ x: control.position_x, y: control.position_y }}
                                             bounds="parent"
                                             enableResizing={{ top: false, right: false, bottom: false, left: false, topRight: true, bottomRight: true, bottomLeft: true, topLeft: true }}
                                             onResizeStart={() => this.selectControl(control)}
-                                            onResize={() => this.selectControl(control)}
-                                            onResizeStop={(e, direction, ref, delta, position) => this.updateSize(ref, position)}>
+                                            onResize={(e, direction, ref, delta, position) => this.updateSize(ref, position)}>
                                             <div key={control.id} style={{
                                                 backgroundColor: control.background_color,
                                                 borderStyle: "solid",
@@ -487,7 +486,7 @@ class EditScreen extends Component {
                                                 height: control.height,
                                                 cursor: "pointer",
                                                 position: "absolute",
-                                                textAlign: "center"
+                                                textAlign: "center",
                                             }}>{control.text}
                                                 <div className="rect top_left" style={control.selected ? null : { display: "none" }}></div>
                                                 <div className="rect top_right" style={control.selected ? null : { display: "none" }}></div>
