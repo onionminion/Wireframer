@@ -8,10 +8,6 @@ import { firestoreConnect } from 'react-redux-firebase';
 
 
 class DatabaseTester extends React.Component {
-
-    // NOTE, BY KEEPING THE DATABASE PUBLIC YOU CAN
-    // DO THIS ANY TIME YOU LIKE WITHOUT HAVING
-    // TO LOG IN
     handleClear = () => {
         console.log(this.props.users);
         const fireStore = getFirestore();
@@ -32,6 +28,7 @@ class DatabaseTester extends React.Component {
                     key: testData.key,
                     width: testData.width,
                     height: testData.height,
+                    time: Date.now(),
                     controls: testData.controls
                 }).then(() => {
                     console.log("DATABASE RESET");

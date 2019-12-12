@@ -36,21 +36,6 @@ export const registerHandler = (newUser, firebase) => (dispatch, getState, { get
     });
 };
 
-export const createWireframeHandler = (wireframe) => (dispatch, getState, { getFirestore }) => {
-    const firestore = getFirestore();
-    firestore.collection('wireframes').add({
-        owner: wireframe.owner,
-        name: wireframe.name,
-        height: wireframe.height,
-        width: wireframe.width,
-        controls: wireframe.controls
-    }).then(() => {
-        dispatch(actionCreators.createWireframe(wireframe));
-    }).catch((err) => {
-        dispatch(actionCreators.createWireframeError(err));
-    });
-}
-
 export const updateWireframeHandler = (wireframe) => (dispatch, getState, { getFirestore }) => {
     const firestore = getFirestore();
     firestore.collection('wireframes').get().then(function (list) {
@@ -60,7 +45,8 @@ export const updateWireframeHandler = (wireframe) => (dispatch, getState, { getF
                 name: wireframe.name,
                 height: wireframe.height,
                 width: wireframe.width,
-                controls: wireframe.controls
+                controls: wireframe.controls,
+                time: wireframe.time
             });
         });
     }).then(() => {

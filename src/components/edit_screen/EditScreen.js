@@ -8,7 +8,6 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { updateWireframeHandler } from '../../store/database/asynchHandler';
 import uuid from 'uuid';
 import { Modal, Button } from 'react-materialize';
-import Draggable from 'react-draggable';
 import { Rnd } from 'react-rnd';
 
 class EditScreen extends Component {

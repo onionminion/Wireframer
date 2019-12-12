@@ -1,29 +1,38 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
-import WireframeListLinks from './WireframeLinks'
-import { createWireframeHandler } from '../../store/database/asynchHandler'
-import { updateWireframeHandler } from '../../store/database/asynchHandler'
-import { objectTypeIndexer } from '@babel/types';
+import WireframeListLinks from './WireframeLinks';
+import { getFirestore } from 'redux-firestore';
+import { updateWireframeHandler } from '../../store/database/asynchHandler';
 
 class HomeScreen extends Component {
+    id = null;
+    state = {
+        goToNew: false
+    }
     handleNewList = () => {       
-        const { props } = this;
-        const wireframe = { 
-            owner: props.auth.email,
-            name: "Unknown",
-            height: 200,
-            width: 200,
-            controls: []
-        }
-        props.create(wireframe);
+        const fireStore = getFirestore();
+        fireStore.collection('wireframes').add({
+            name: 'Unknown',
+            owner: this.props.auth.email,
+            height: 2000,
+            width: 2000,
+            controls: [],
+            time: Date.now(),
+        }).then(doc => {
+            this.id = doc.id;
+            this.setState({goToNew: true});
+        });
     }
 
     render() {
         if (!this.props.auth.uid) {
             return <Redirect to="/login" />;
+        }
+        if (this.state.goToNew) {
+            return <Redirect to={"/wireframe/"+this.id}/>;
         }
         return (
             <div className="dashboard container width-100">
@@ -55,13 +64,12 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    create: (wireframe) => dispatch(createWireframeHandler(wireframe)),
     update: (wireframe) => dispatch(updateWireframeHandler(wireframe))
 });  
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect([
-        { collection: 'wireframes'}
+        { collection: 'wireframes' }
     ])
 )(HomeScreen);

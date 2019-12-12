@@ -20,7 +20,7 @@ class WireframeLinks extends React.Component {
 
         return (
             <div className="wireframes section">
-                {wireframes && wireframes.map(wireframe => (
+                {wireframes && wireframes.sort((a, b) => a.time < b.time).map(wireframe => (
                     <Link to={'/wireframe/' + wireframe.id} key={wireframe.id}>
                         <WireframeCard wireframe={wireframe} />
                     </Link>

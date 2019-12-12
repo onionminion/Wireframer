@@ -1,15 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { deleteWireframeHandler } from '../../store/database/asynchHandler'
+import { updateWireframeHandler } from '../../store/database/asynchHandler';
+import { getFirestore } from 'redux-firestore';
 import DeleteModal from './DeleteModal.js';
 
 class WireframeCard extends React.Component {
+    updateTime = (wireframe) => {
+        wireframe.time = Date.now();
+        this.props.update(wireframe);
+    }
     render() {
         const { wireframe } = this.props;
-
         return (
-            <div className="card transparent z-depth-0 todo-list-link"  >
+            <div className="card transparent z-depth-0 todo-list-link" onClick={()=>this.updateTime(wireframe)}  >
                 <div className="card-content grey-text text-darken-3 no-padding" >
                     <div className="row">
                         <div className="col s11 m9">
@@ -26,7 +30,7 @@ class WireframeCard extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    delete: (wireframe) => dispatch(deleteWireframeHandler(wireframe))
+    update: (wireframe) => dispatch(updateWireframeHandler(wireframe))
 });
 
 export default compose(
