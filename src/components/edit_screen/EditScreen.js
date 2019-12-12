@@ -27,7 +27,7 @@ class EditScreen extends Component {
         currentBordColor: null,
         currentBordThick: null,
         currentBordRad: null,
-        activeProp: false,
+        saved: true,
         redirect: false
     }
 
@@ -51,6 +51,8 @@ class EditScreen extends Component {
                 newControls[i].text = e.target.value;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
+
             }
         }
     }
@@ -62,6 +64,7 @@ class EditScreen extends Component {
                 newControls[i].background_color = e.target.value;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
             }
         }
     }
@@ -73,6 +76,7 @@ class EditScreen extends Component {
                 newControls[i].text_color = e.target.value;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
             }
         }
     }
@@ -84,6 +88,7 @@ class EditScreen extends Component {
                 newControls[i].border_color = e.target.value;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
             }
         }
     }
@@ -98,6 +103,7 @@ class EditScreen extends Component {
                 newControls[i].border_thickness = thickness;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
             }
         }
     }
@@ -112,6 +118,7 @@ class EditScreen extends Component {
                 newControls[i].border_radius = rad;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
             }
         }
     }
@@ -126,6 +133,7 @@ class EditScreen extends Component {
                 newControls[i].font_size = size;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
             }
         }
     }
@@ -148,6 +156,7 @@ class EditScreen extends Component {
         }
         controls.push(container);
         this.setState({ controls });
+        this.setState({ saved: false });
     }
     addLabel = () => {
         const controls = this.state.controls;
@@ -168,6 +177,7 @@ class EditScreen extends Component {
         }
         controls.push(label);
         this.setState({ controls });
+        this.setState({ saved: false });
     }
     addButton = () => {
         const controls = this.state.controls;
@@ -188,6 +198,7 @@ class EditScreen extends Component {
         }
         controls.push(button);
         this.setState({ controls });
+        this.setState({ saved: false });
     }
     addTextfield = () => {
         const controls = this.state.controls;
@@ -208,6 +219,7 @@ class EditScreen extends Component {
         }
         controls.push(textfield);
         this.setState({ controls });
+        this.setState({ saved: false });
     }
     deleteControl = (e) => {
         console.log(e.key);
@@ -219,11 +231,11 @@ class EditScreen extends Component {
                 }
             }
             this.setState({ controls: newControls });
+            this.setState({ saved: false });
             this.unselect();
         }
     }
     selectControl = (control) => {
-        this.setState({ activeProp: true });
         if (this.state.currentControl != null) {
             for (var i = 0; i < this.state.controls.length; i++) {
                 if (this.state.controls[i].id == this.state.currentControl.id) {
@@ -265,11 +277,13 @@ class EditScreen extends Component {
                 newControls[i].position_y = data.y;
                 this.setState({ controls: newControls });
                 this.setState({ currentControl: newControls[i] });
+                this.setState({ saved: false });
             }
         }
     }
     saveWork = () => {
         this.unselect();
+        this.setState({ saved: true });
         const wireframe = {
             name: this.state.name,
             owner: this.state.owner,
@@ -321,12 +335,13 @@ class EditScreen extends Component {
                             </div>
                             <div className="col s3 save clickable" onClick={() => this.saveWork()}><span>Save</span></div>
                             <div className="col s3 save clickable">
+                                {this.state.saved ? <span onClick={()=>this.close()}>Close</span> :
                                 <Modal header="Close Edit Screen" trigger={<span>Close</span>} className="modal-style" actions={
                                     <div>
                                         <Button waves="green" modal="close" flat onClick={() => this.saveBeforeClose()}>Save</Button>
-                                        <Button waves="red" modal="close" flat onClick={() => this.close()}>Close</Button>
+                                        <Button waves="red" modal="close" flat onClick={() => this.close()}>Close without saving</Button>
                                     </div>
-                                }>Do you want to save your work before closing?</Modal>
+                                }>Do you want to save your work before closing?</Modal>}
                             </div>
                         </div>
                         <span>&nbsp;<br /><br /></span>
